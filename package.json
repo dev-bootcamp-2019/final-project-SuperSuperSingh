@@ -1,0 +1,18 @@
+{
+  "name": "Online-Marketplace",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "lite-server",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "SatoshiSingh",
+  "license": "ISC",
+  "devDependencies": {
+    "lite-server": "^2.3.0"
+  }
+}
