@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Decentralised marketplace</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+
+  <body id="home">
+
+    <h1>Store owner dashboard</h1>
+    <input placeholder="New store name"/>
+    <button>Create Store</button>
+    <hr/>
+
+    <input placeholder="Add item name"/>
+    <input placeholder="Item quantity"/>
+    <input placeholder="Item price"/>
+    <input placeholder="Shop ID"/>
+    <button>Add new item</button>
+    <hr/>
+
+    <input placeholder="New item price"/>
+    <input placeholder="SKU"/>
+    <input placeholder="Shop ID"/>
+    <button>Update item price</button>
+    <hr/>
+
+    <input placeholder="SKU"/>
+    <input placeholder="Shop ID"/>
+    <button>Delete item</button>
+    <hr/>
+
+    <input placeholder="Shop ID"/>
+    <button>Withdraw sales</button>
+    <hr/>
+    
+  </body>
+
+</html>
