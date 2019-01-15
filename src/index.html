@@ -6,19 +6,98 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <title>Decentralised marketplace</title>
-    <link rel="stylesheet" href="style.css" />
     <link href="css/bootstrap.min.css" rel="stylesheet">
   </head>
 
 
-  <body id="home">
+  <body id="home" class="container text-center">
 
-    <h1>Welcome to the decentralised online marketplace!</h1>
-    <hr/>
+    <!--Contract Owner-->
+    <section id="welcomeView">
+      <h1>Welcome to the decentralised online marketplace!</h1>
+      <h3 id="accountAddress"></h3>
+      <h3 id="accountBalance"></h3>
+      <hr/>
 
-    <button>Login</button>
-    <hr/>
+      <button id="login">Login</button>
+      <hr/>
+    </section>
+
+
+    <!--Contract Owner-->
+    <section id="contractOwnerView">
+      <h1>Contract Owner dashboard</h1>
+      <hr/>
+
+      <input placeholder="New administrators address"/>
+      <button id="addAdmin">Add administrator</button>
+      <hr/>
+
+      <input placeholder="Address of administrator to delete"/>
+      <button>Delete administrator</button>
+      <hr/>
+
+      <p>Total revenue of marketplace</p>
+      <hr/>
+    </section>
+      
+
+
+    <!--Administrator-->
+    <section id="administratorView">
+      <h1>Administrator dashboard</h1>
+      <hr/>
+
+      <input placeholder="New store owner's address"/>
+      <button>Add store owner</button>
+      <hr/>
+
+      <input placeholder="Address of store owner to delete"/>
+      <button>Delete store owner</button>
+      <hr/> 
+    </section>
+
+
+
+    <!--Store Owner-->
+    <section id="storeOwnerView">
+      <h1>Store owner dashboard</h1>
+      <input placeholder="New store name"/>
+      <button>Create Store</button>
+      <hr/>
+
+      <input placeholder="Add item name"/>
+      <input placeholder="Item quantity"/>
+      <input placeholder="Item price"/>
+      <input placeholder="Shop ID"/>
+      <button>Add new item</button>
+      <hr/>
+
+      <input placeholder="New item price"/>
+      <input placeholder="SKU"/>
+      <input placeholder="Shop ID"/>
+      <button>Update item price</button>
+      <hr/>
+
+      <input placeholder="SKU"/>
+      <input placeholder="Shop ID"/>
+      <button>Delete item</button>
+      <hr/>
+
+      <input placeholder="Shop ID"/>
+      <button>Withdraw sales</button>
+      <hr/>
+    </section>
+
+
+
+    <!--Shopper-->
+    <section id="shopperView">
+
+    </section>
     
+
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

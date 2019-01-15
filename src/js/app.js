@@ -21,38 +21,40 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON("Election.json", function(election) {
+    $.getJSON("MarketPlace.json", function(MarketPlace) { //Where does MarketPlace come from?
       // Instantiate a new truffle contract from the artifact
-      App.contracts.Election = TruffleContract(election);
+      App.contracts.MarketPlace = TruffleContract(MarketPlace);
       // Connect provider to interact with contract
-      App.contracts.Election.setProvider(App.web3Provider);
+      App.contracts.MarketPlace.setProvider(App.web3Provider);
 
       return App.render();
     });
   },
 
   render: function() {
-    var electionInstance;
-    var loader = $("#loader");
-    var content = $("#content");
+    var marketplaceInstance;
 
-    loader.show();
-    content.hide();
+    //var loader = $("#administratorView");
+    //var content = $("#storeOwnerView");
+
+    //loader.show();
+    //content.hide();
 
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
         App.account = account;
         $("#accountAddress").html("Your Account: " + account);
+        $("#accountBalance").html("You balance: " + web3.eth.getBalance(account)); //What is wrong ith this line?
       }
     });
 
     // Load contract data
-    App.contracts.Election.deployed().then(function(instance) {
-      electionInstance = instance;
-      return electionInstance.candidatesCount();
-    }).then(function(candidatesCount) {
-      var candidatesResults = $("#candidatesResults");
+    App.contracts.MarketPlace.deployed().then(function(instance) { //Where does instance come from?
+      marketplaceInstance = instance;
+      //return marketplaceInstance.candidatesCount();
+    })//.then(function(candidatesCount) {
+      /*var candidatesResults = $("#candidatesResults");
       candidatesResults.empty();
 
       for (var i = 1; i <= candidatesCount; i++) {
@@ -71,12 +73,22 @@ App = {
       content.show();
     }).catch(function(error) {
       console.warn(error);
+    })*/;
+  },
+
+  $(document).ready(function() {
+    $("#login").click(function(){
+      //check the account against the Contract Owner, then the adminDB, then the ShopOwnerDB, otherwise it is a shopper
     });
-  }
+  });
 };
 
 $(function() {
   $(window).load(function() {
+    $("#storeOwnerView").hide(); //Is this the best way of hiding inactive views?
+    $("#administratorView").hide();
+    $("#contractOwnerView").hide();
+    $("#shopperView").hide();
     App.init();
   });
 });
