@@ -3,15 +3,16 @@ Questions:
 Does it cost more to store arrays as they grow in length?
 If so, is it worth clearing an empty spot in an array after deleting an element?
 Implement Eth/USD price
+How do I check what address I'm deployed on and how do I deploy from a specific address so that I am the owner
 */
 
 pragma solidity 0.5.0;
 
 contract MarketPlace {
 
-    address owner;
-    uint storeCount = 0;
-    uint skuCount = 0;
+    address public owner;
+    uint public storeCount = 0;
+    uint public skuCount = 0;
 
     //Struct to hold details about each item for sale in a particular store
     struct ItemForSale {
@@ -89,6 +90,14 @@ contract MarketPlace {
         uint amountToRefund = msg.value - _price*_quantity;
         msg.sender.transfer(amountToRefund);
         emit refund(amountToRefund);
+    }
+
+
+
+    //Debugging
+
+    function numberOfStores() public view returns (uint) {
+        return storeCount;
     }
 
 

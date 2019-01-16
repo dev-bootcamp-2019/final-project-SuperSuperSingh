@@ -21,9 +21,10 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON("MarketPlace.json", function(MarketPlace) { //Where does MarketPlace come from?
+    $.getJSON("MarketPlace.json", function(data) {
       // Instantiate a new truffle contract from the artifact
-      App.contracts.MarketPlace = TruffleContract(MarketPlace);
+      var MarketPlaceArtifact = data;
+      App.contracts.MarketPlace = TruffleContract(MarketPlaceArtifact);
       // Connect provider to interact with contract
       App.contracts.MarketPlace.setProvider(App.web3Provider);
 
@@ -34,53 +35,66 @@ App = {
   render: function() {
     var marketplaceInstance;
 
-    //var loader = $("#administratorView");
-    //var content = $("#storeOwnerView");
-
-    //loader.show();
-    //content.hide();
+    var loader = $("#welcomeView");
+    loader.show();
 
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
         App.account = account;
         $("#accountAddress").html("Your Account: " + account);
-        $("#accountBalance").html("You balance: " + web3.eth.getBalance(account)); //What is wrong ith this line?
+        //$("#accountBalance").html("Your Balance: " + web3.eth.getBalance(App.account));
       }
     });
 
     // Load contract data
     App.contracts.MarketPlace.deployed().then(function(instance) { //Where does instance come from?
       marketplaceInstance = instance;
-      //return marketplaceInstance.candidatesCount();
+      return marketplaceInstance.numberOfStores();
     })//.then(function(candidatesCount) {
       /*var candidatesResults = $("#candidatesResults");
       candidatesResults.empty();
 
-      for (var i = 1; i <= candidatesCount; i++) {
-        electionInstance.candidates(i).then(function(candidate) {
-          var id = candidate[0];
-          var name = candidate[1];
-          var voteCount = candidate[2];
-
-          // Render candidate Result
-          var candidateTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + voteCount + "</td></tr>"
-          candidatesResults.append(candidateTemplate);
-        });
-      }
-
-      loader.hide();
-      content.show();
     }).catch(function(error) {
       console.warn(error);
     })*/;
-  },
-
-  $(document).ready(function() {
+    $("#accountBalance").html("Your Balance: " + marketplaceInstance.skuCount);
+    //alert(marketplaceInstance.getAddress());
+    //alert(marketplaceInstance.skuCount);
+    
     $("#login").click(function(){
-      //check the account against the Contract Owner, then the adminDB, then the ShopOwnerDB, otherwise it is a shopper
+      switch(address) {
+        case address == marketplaceInstance.owner:
+          alert("Logging in as Contract Owner");
+          $("#contractOwnerView").show();
+          $("#administratorView").hide();
+          $("#storeOwnerView").hide();
+          $("#shopperView").hide();
+          break;
+        case marketplaceInstance.adminsDB[address] == true:
+          alert("Logging in as Marketplace Administrator");
+          $("#contractOwnerView").hide();
+          $("#administratorView").show();
+          $("#storeOwnerView").hide();
+          $("#shopperView").hide();
+          break;
+        case marketplaceInstance.storeOwnersDB[address] == true:
+          alert("Logging in as Storefront Owner");
+          $("#contractOwnerView").hide();
+          $("#administratorView").hide();
+          $("#storeOwnerView").show();
+          $("#shopperView").hide();
+          
+          break;
+        default:
+          alert("Logging in as store patron");
+          $("#contractOwnerView").hide();
+          $("#administratorView").hide();
+          $("#storeOwnerView").hide();
+          $("#shopperView").show();
+      }
     });
-  });
+  },
 };
 
 $(function() {
