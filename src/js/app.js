@@ -1,8 +1,8 @@
 var marketplaceInstance = null;
 
-$("#login").click(function(){
+$("#login").click(async function(){
   console.log("Attempted to log in");
-  if (App.account == marketplaceInstance.owner) {
+  if (App.account == await marketplaceInstance.owner()) {
       alert("Logging in as Contract Owner");
       $("#contractOwnerView").show();
       $("#administratorView").hide();
@@ -48,10 +48,11 @@ $("#logout").click(function(){
       $("#welcomeView").show();
 })
 
-$("#addAdminButton").click(function() { 
+$("#addAdminButton").click(async function() { 
   console.log("Attempted to add admin");
   var adminAddressToAdd = $("#addAdminInput").val();
-  marketplaceInstance.addAdmin(adminAddressToAdd);
+  var result = await marketplaceInstance.addAdmin(adminAddressToAdd);
+  console.log(result);
 
   /*try {
     console.log("Attempted to add admin");
@@ -185,11 +186,11 @@ App = {
 
 $(function() {
   $(window).load(function() {
-    $("#storeOwnerView").hide(); //Is this the best way of hiding inactive views?
-    $("#administratorView").hide();
-    $("#contractOwnerView").hide();
-    $("#shopperView").hide();
-    $("#logout").hide();
+    $("#storeOwnerView").show(); //Is this the best way of hiding inactive views?
+    $("#administratorView").show();
+    $("#contractOwnerView").show();
+    $("#shopperView").show();
+    $("#logout").show();
     App.init();
   });
 });
