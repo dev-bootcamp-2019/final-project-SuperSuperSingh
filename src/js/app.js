@@ -1,3 +1,123 @@
+var marketplaceInstance = null;
+
+$("#login").click(function(){
+  console.log("Attempted to log in");
+  if (App.account == marketplaceInstance.owner) {
+      alert("Logging in as Contract Owner");
+      $("#contractOwnerView").show();
+      $("#administratorView").hide();
+      $("#storeOwnerView").hide();
+      $("#shopperView").hide();
+      $("#welcomeView").hide();
+      $("#logout").show();
+  }
+  else if (marketplaceInstance.adminsDB[App.account] == true) {
+      alert("Logging in as Marketplace Administrator");
+      $("#contractOwnerView").hide();
+      $("#administratorView").show();
+      $("#storeOwnerView").hide();
+      $("#shopperView").hide();
+      $("#welcomeView").hide();
+  }
+  else if(marketplaceInstance.storeOwnersDB[App.account] == true) {
+      alert("Logging in as Storefront Owner");
+      $("#contractOwnerView").hide();
+      $("#administratorView").hide();
+      $("#storeOwnerView").show();
+      $("#shopperView").hide();
+      $("#welcomeView").hide();
+      $("#logout").show();
+  }
+  else {
+      alert("Logging in as store patron");
+      $("#contractOwnerView").hide();
+      $("#administratorView").hide();
+      $("#storeOwnerView").hide();
+      $("#shopperView").show();
+      $("#welcomeView").hide();
+      $("#logout").show();
+  }
+})
+
+$("#logout").click(function(){
+  alert("Logging out");
+      $("#contractOwnerView").hide();
+      $("#administratorView").hide();
+      $("#storeOwnerView").hide();
+      $("#shopperView").hide();
+      $("#welcomeView").show();
+})
+
+$("#addAdminButton").click(function() { 
+  console.log("Attempted to add admin");
+  var adminAddressToAdd = $("#addAdminInput").val();
+  marketplaceInstance.addAdmin(adminAddressToAdd);
+
+  /*try {
+    console.log("Attempted to add admin");
+    var adminAddressToAdd = $("#addAdminInput").val();
+    marketplaceInstance.addAdmin(adminAddressToAdd);
+  } catch (error){
+    alert("Transaction rejected");
+  }*/
+})
+
+$("#deleteAdminButton").click(function() {
+  console.log("Attempted to delete admin");
+  var adminAddressToDelete = $("#deleteAdminInput").val();
+  marketplaceInstance.deleteAdmin(adminAddressToDelete);
+})
+
+$("#addStoreOwnerButton").click(function() {
+  console.log("Attempted to add store owner");
+  var storeOwnerAddressToAdd = $("#addStoreOwnerInput").val();
+  marketplaceInstance.addStoreOwner(storeOwnerAddressToAdd);
+})
+
+$("#deleteStoreOwner").click(function() {
+  console.log("Attempted to delete store owner");
+  var storeOwnerAddressToDelete = $("#deleteStoreOwnerInput").val();
+  marketplaceInstance.deleteStoreOwner(storeOwnerAddressToDelete);
+})
+
+$("#createStoreButton").click(function() {
+  console.log("Attempted to create store");
+  var storeToCreate = $("#createStoreInput").val();
+  marketplaceInstance.createStoreFront(storeToCreate);
+})
+
+$("#newItemButton").click(function() {
+  console.log("Attempted to add new item");
+  var newItemName = $("#newItemName").val();
+  var newItemQuantity = $("#newItemQuantity").val();
+  var newItemPrice = $("#newItemPrice");
+  var newItemShopID = $("#newItemShopID");
+  marketplaceInstance.createStoreFront(newItemName, newItemQuantity, newItemPrice, newItemShopID);
+})
+
+$("#changePriceButton").click(function() {
+  console.log("Attempted to change item price");
+  var changePriceInput = $("#changePriceNewPrice").val();
+  var changePriceSKU = $("#changePriceSKU").val();
+  var changePriceShopID = $("#changePriceShopID");
+  marketplaceInstance.createStoreFront(changePriceInput, changePriceSKU, changePriceShopID, newItemShopID);
+})
+
+$("#deleteItemButton").click(function() {
+  var skuToDelete = $("#skuToDelete");
+  var skuShopIDToDelete = $("#skuShopIDToDelete");
+  marketplaceInstance.deleteItem(skuToDelete, skuShopIDToDelete);
+})
+
+$("withdrawButton").click(function() {
+  var shopIDtoWithdrawFrom = $("#shopIDtoWithdrawFrom");
+  marketplaceInstance.withdrawSales(shopIDtoWithdrawFrom);
+})
+
+$("#sayHelloButton").click(function(){
+  alert($("#sayHello").val());
+})
+
 App = {
   web3Provider: null,
   contracts: {},
@@ -33,7 +153,6 @@ App = {
   },
 
   render: function() {
-    var marketplaceInstance;
 
     var loader = $("#welcomeView");
     loader.show();
@@ -42,58 +161,25 @@ App = {
     web3.eth.getCoinbase(function(err, account) {
       if (err === null) {
         App.account = account;
+        if (account == null) {
+          account = "No account found. Please log into Metamask or use test wallet";
+        }
         $("#accountAddress").html("Your Account: " + account);
         //$("#accountBalance").html("Your Balance: " + web3.eth.getBalance(App.account));
       }
     });
 
-    // Load contract data
-    App.contracts.MarketPlace.deployed().then(function(instance) { //Where does instance come from?
+    // Load shopcount
+    App.contracts.MarketPlace.deployed().then(function(instance) {
       marketplaceInstance = instance;
-      return marketplaceInstance.numberOfStores();
-    })//.then(function(candidatesCount) {
-      /*var candidatesResults = $("#candidatesResults");
-      candidatesResults.empty();
 
-    }).catch(function(error) {
-      console.warn(error);
-    })*/;
-    $("#accountBalance").html("Your Balance: " + marketplaceInstance.skuCount);
-    //alert(marketplaceInstance.getAddress());
-    //alert(marketplaceInstance.skuCount);
-    
-    $("#login").click(function(){
-      switch(address) {
-        case address == marketplaceInstance.owner:
-          alert("Logging in as Contract Owner");
-          $("#contractOwnerView").show();
-          $("#administratorView").hide();
-          $("#storeOwnerView").hide();
-          $("#shopperView").hide();
-          break;
-        case marketplaceInstance.adminsDB[address] == true:
-          alert("Logging in as Marketplace Administrator");
-          $("#contractOwnerView").hide();
-          $("#administratorView").show();
-          $("#storeOwnerView").hide();
-          $("#shopperView").hide();
-          break;
-        case marketplaceInstance.storeOwnersDB[address] == true:
-          alert("Logging in as Storefront Owner");
-          $("#contractOwnerView").hide();
-          $("#administratorView").hide();
-          $("#storeOwnerView").show();
-          $("#shopperView").hide();
-          
-          break;
-        default:
-          alert("Logging in as store patron");
-          $("#contractOwnerView").hide();
-          $("#administratorView").hide();
-          $("#storeOwnerView").hide();
-          $("#shopperView").show();
-      }
-    });
+      //marketplaceInstance.skuCount(function(error,result){
+        //console.log("The obect information %o",result)
+
+      return marketplaceInstance.storeCount();
+    }).then(function(storeCount) {
+        $("#numberOfStores").html("Number of stores: " + storeCount);
+      });
   },
 };
 
@@ -103,6 +189,7 @@ $(function() {
     $("#administratorView").hide();
     $("#contractOwnerView").hide();
     $("#shopperView").hide();
+    $("#logout").hide();
     App.init();
   });
 });

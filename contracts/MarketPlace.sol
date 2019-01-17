@@ -4,6 +4,7 @@ Does it cost more to store arrays as they grow in length?
 If so, is it worth clearing an empty spot in an array after deleting an element?
 Implement Eth/USD price
 How do I check what address I'm deployed on and how do I deploy from a specific address so that I am the owner
+How do I change addresses to test using Metamask
 */
 
 pragma solidity 0.5.0;

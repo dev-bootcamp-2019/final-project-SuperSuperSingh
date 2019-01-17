@@ -16,7 +16,7 @@
     <section id="welcomeView">
       <h1>Welcome to the decentralised online marketplace!</h1>
       <h3 id="accountAddress"></h3>
-      <h3 id="accountBalance"></h3>
+      <h3 id="numberOfStores"></h3>
       <hr/>
 
       <button id="login">Login</button>
@@ -29,12 +29,12 @@
       <h1>Contract Owner dashboard</h1>
       <hr/>
 
-      <input placeholder="New administrators address"/>
-      <button id="addAdmin">Add administrator</button>
+      <input id="addAdminInput" placeholder="New administrators address"/>
+      <button id="addAdminButton">Add administrator</button>
       <hr/>
 
-      <input placeholder="Address of administrator to delete"/>
-      <button>Delete administrator</button>
+      <input id="deleteAdminInput" placeholder="Address of administrator to delete"/>
+      <button id="deleteAdminButton">Delete administrator</button>
       <hr/>
 
       <p>Total revenue of marketplace</p>
@@ -48,12 +48,12 @@
       <h1>Administrator dashboard</h1>
       <hr/>
 
-      <input placeholder="New store owner's address"/>
-      <button>Add store owner</button>
+      <input id="addStoreOwnerInput" placeholder="New store owner's address"/>
+      <button id="addStoreOwnerButton">Add store owner</button>
       <hr/>
 
-      <input placeholder="Address of store owner to delete"/>
-      <button>Delete store owner</button>
+      <input id="deleteStoreOwnerInput" placeholder="Address of store owner to delete"/>
+      <button id="delteStoreOwnerButton">Delete store owner</button>
       <hr/> 
     </section>
 
@@ -62,41 +62,45 @@
     <!--Store Owner-->
     <section id="storeOwnerView">
       <h1>Store owner dashboard</h1>
-      <input placeholder="New store name"/>
-      <button>Create Store</button>
+      <input id="createStoreInput" placeholder="New store name"/>
+      <button id="createStoreButton">Create Store</button>
       <hr/>
 
-      <input placeholder="Add item name"/>
-      <input placeholder="Item quantity"/>
-      <input placeholder="Item price"/>
-      <input placeholder="Shop ID"/>
-      <button>Add new item</button>
+      <input id="newItemName" placeholder="Add item name"/>
+      <input id="newItemQuantity" placeholder="Item quantity"/>
+      <input id="newItemPrice" placeholder="Item price"/>
+      <input id="newItemShopID" placeholder="Shop ID"/>
+      <button id="newItemButton">Add new item</button>
       <hr/>
 
-      <input placeholder="New item price"/>
-      <input placeholder="SKU"/>
-      <input placeholder="Shop ID"/>
-      <button>Update item price</button>
+      <input id="changePriceNewPrice" placeholder="New item price"/>
+      <input id="changePriceSKU" placeholder="SKU"/>
+      <input id="changePriceShopID" placeholder="Shop ID"/>
+      <button id="changePriceButton">Update item price</button>
       <hr/>
 
-      <input placeholder="SKU"/>
-      <input placeholder="Shop ID"/>
-      <button>Delete item</button>
+      <input id="skuToDelete" placeholder="SKU"/>
+      <input id="skuShopIDToDelete" placeholder="Shop ID"/>
+      <button id="changePriceButton">Delete item</button>
       <hr/>
 
-      <input placeholder="Shop ID"/>
-      <button>Withdraw sales</button>
+      <input id="shopIDtoWithdrawFrom" placeholder="Shop ID"/>
+      <button id="withdrawButton">Withdraw sales</button>
       <hr/>
     </section>
-
 
 
     <!--Shopper-->
     <section id="shopperView">
-
+      <input id="sayHello" placeholder="Want to shout out something to the world?"/>
+      <button id="sayHelloButton">Say Hello!</button>
     </section>
     
 
+    <button id="logout">Log out</button>
+
+
+    
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
