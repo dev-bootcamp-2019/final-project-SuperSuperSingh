@@ -1,4 +1,5 @@
 var marketplaceInstance = null;
+var selectedShop = null;
 
 $("#login").click(async function(){
   console.log("Attempted to log in");
@@ -7,45 +8,71 @@ $("#login").click(async function(){
       $("#contractOwnerView").show();
       $("#administratorView").hide();
       $("#storeOwnerView").hide();
-      $("#shopperView").hide();
+      $("#shopperSelectShop").hide();
       $("#welcomeView").hide();
       $("#logout").show();
   }
-  else if (marketplaceInstance.adminsDB[App.account] == true) {
+  else if(await marketplaceInstance.adminsDB.call(App.account) == true) {
       alert("Logging in as Marketplace Administrator");
       $("#contractOwnerView").hide();
       $("#administratorView").show();
       $("#storeOwnerView").hide();
-      $("#shopperView").hide();
+      $("#shopperSelectShop").hide();
       $("#welcomeView").hide();
+      $("#logout").show();
   }
-  else if(marketplaceInstance.storeOwnersDB[App.account] == true) {
+  else if(await marketplaceInstance.storeOwnersDB.call(App.account) == true) {
       alert("Logging in as Storefront Owner");
       $("#contractOwnerView").hide();
       $("#administratorView").hide();
       $("#storeOwnerView").show();
-      $("#shopperView").hide();
+      $("#shopperSelectShop").hide();
       $("#welcomeView").hide();
       $("#logout").show();
   }
   else {
-      alert("Logging in as store patron");
+      alert("Logging in as shopper");
       $("#contractOwnerView").hide();
       $("#administratorView").hide();
       $("#storeOwnerView").hide();
-      $("#shopperView").show();
+      $("#shopperSelectShop").show();
       $("#welcomeView").hide();
       $("#logout").show();
+
+      var noOfRows = await marketplaceInstance.storeCount();
+      for (var k = 1; k <= noOfRows; k++) {
+        $('#shopTable > tbody:last-child').append('<tr><td>',marketplaceInstance.storeFront.call(k).storeName,'</td><td>',k,'</td></tr>');
+        //$(function(){        
+          //var $button = $('.shopSelector').clone();
+          //$button.val() = await marketplaceInstance.storeFront.call(k).storeName + "Shop ID: " + k;
+          //$('#shopperSelectShop').html($button);
+        //});
+      }
+      $("#selectedShopButton").click(async function(){
+        selectedShop = $("#selectedShop").val();
+
+        $("#shopperSelectShop").hide();
+        $("#shopperShop").show();
+
+        var noOfRows = await marketplaceInstance.storeFront.call(selectedShop).sku.length();
+
+        for (var k = 1; k <= noOfRows; k++) {
+          $('#forSaleTable > tbody:last-child').append('<tr><td>',marketplaceInstance.storeFront.call(selectedShop).sku.call(k).name,'</td><td>',marketplaceInstance.storeFront.call(selectedShop).sku.call(k).quantity,'</td><td>',marketplaceInstance.storeFront.call(selectedShop).sku.call(k).price,'</td></tr>');
+        }
+      })
+      
+
   }
 })
 
 $("#logout").click(function(){
   alert("Logging out");
-      $("#contractOwnerView").hide();
-      $("#administratorView").hide();
-      $("#storeOwnerView").hide();
-      $("#shopperView").hide();
-      $("#welcomeView").show();
+  $("#contractOwnerView").hide();
+  $("#administratorView").hide();
+  $("#storeOwnerView").hide();
+  $("#shopperSelectShop").hide();
+  $("#shopperShop").hide();
+  $("#welcomeView").show();
 })
 
 $("#addAdminButton").click(async function() { 
@@ -91,33 +118,39 @@ $("#newItemButton").click(function() {
   console.log("Attempted to add new item");
   var newItemName = $("#newItemName").val();
   var newItemQuantity = $("#newItemQuantity").val();
-  var newItemPrice = $("#newItemPrice");
-  var newItemShopID = $("#newItemShopID");
-  marketplaceInstance.createStoreFront(newItemName, newItemQuantity, newItemPrice, newItemShopID);
+  var newItemPrice = $("#newItemPrice").val();
+  var newItemShopID = $("#newItemShopID").val();
+  marketplaceInstance.addItem(newItemName, newItemQuantity, newItemPrice, newItemShopID);
 })
 
 $("#changePriceButton").click(function() {
   console.log("Attempted to change item price");
   var changePriceInput = $("#changePriceNewPrice").val();
   var changePriceSKU = $("#changePriceSKU").val();
-  var changePriceShopID = $("#changePriceShopID");
-  marketplaceInstance.createStoreFront(changePriceInput, changePriceSKU, changePriceShopID, newItemShopID);
+  var changePriceShopID = $("#changePriceShopID").val();
+  marketplaceInstance.changePrice(changePriceInput, changePriceSKU, changePriceShopID, newItemShopID);
 })
 
 $("#deleteItemButton").click(function() {
-  var skuToDelete = $("#skuToDelete");
-  var skuShopIDToDelete = $("#skuShopIDToDelete");
+  var skuToDelete = $("#skuToDelete").val();
+  var skuShopIDToDelete = $("#skuShopIDToDelete").val();
   marketplaceInstance.deleteItem(skuToDelete, skuShopIDToDelete);
 })
 
 $("withdrawButton").click(function() {
-  var shopIDtoWithdrawFrom = $("#shopIDtoWithdrawFrom");
+  console.log("Attempted to withdraw sales");
+  var shopIDtoWithdrawFrom = $("#shopIDtoWithdrawFrom").val();
   marketplaceInstance.withdrawSales(shopIDtoWithdrawFrom);
 })
 
-$("#sayHelloButton").click(function(){
-  alert($("#sayHello").val());
+$("buyButton").click(function(){
+  console.log("Attempted to purchase item");
+  var buySKU = $("#buySKU").val();
+  var buyQuantity = $("#buyQuantity").val();
+  var buyStoreID = selectedShop;
+  marketplaceInstance.buyItem(buyQuantity, buySKU, buyStoreID);
 })
+
 
 App = {
   web3Provider: null,
@@ -186,11 +219,12 @@ App = {
 
 $(function() {
   $(window).load(function() {
-    $("#storeOwnerView").show(); //Is this the best way of hiding inactive views?
-    $("#administratorView").show();
-    $("#contractOwnerView").show();
-    $("#shopperView").show();
-    $("#logout").show();
+    $("#storeOwnerView").hide(); //Is this the best way of hiding inactive views?
+    $("#administratorView").hide();
+    $("#contractOwnerView").hide();
+    $("#shopperSelectShop").hide();
+    $("#shopperShop").hide();
+    $("#logout").hide();
     App.init();
   });
 });

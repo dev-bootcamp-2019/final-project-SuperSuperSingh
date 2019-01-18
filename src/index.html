@@ -69,7 +69,7 @@
       <input id="newItemName" placeholder="Add item name"/>
       <input id="newItemQuantity" placeholder="Item quantity"/>
       <input id="newItemPrice" placeholder="Item price"/>
-      <input id="newItemShopID" placeholder="Shop ID"/>
+      <input id="newItemShopID" placeholder="What is the shop ID to add the item to"/>
       <button id="newItemButton">Add new item</button>
       <hr/>
 
@@ -91,11 +91,35 @@
 
 
     <!--Shopper-->
-    <section id="shopperView">
-      <input id="sayHello" placeholder="Want to shout out something to the world?"/>
-      <button id="sayHelloButton">Say Hello!</button>
+    <section id="shopperSelectShop">
+      <h1>Select a shop to browse</h1>
+      <table id="shopTable">
+        <tr>
+          <th>Store</th>
+          <th>Store ID</th>
+        </tr>
+      </table>
+      <input id="selectedShop" placeholder="Enter number of shop to browse"/>
+      <button id="selectedShopButton">Go to shop</button>
     </section>
     
+    <section id="shopperShop">
+      <h1>Items for sale</h1>
+      <table id="forSaleTable">
+        <tr>
+          <th>Item</th>
+          <th>Quantity Available</th>
+          <th>Price per unit</th>
+        </tr>
+      </table>
+
+      <input id="buySKU" placeholder="Item code to purchase"/>
+      <input id="buyQuantity" placeholder="Quantity to buy"/>
+      <button id="buyButton">Purchase</button>
+
+      buyItem(uint _quantity, uint _skuCode, uint _storeID) 
+
+    </section>
 
     <button id="logout">Log out</button>
 
