@@ -1,10 +1,6 @@
 /*
 Questions:
-Does it cost more to store arrays as they grow in length?
-If so, is it worth clearing an empty spot in an array after deleting an element?
 Implement Eth/USD price
-How do I check what address I'm deployed on and how do I deploy from a specific address so that I am the owner
-How do I change addresses to test using Metamask
 */
 
 pragma solidity 0.5.0;
@@ -45,15 +41,16 @@ contract MarketPlace {
     //Events
     event adminAdded(address _admin);
     event adminDeleted(address _admin);
-    event shopOwnerAdded(address _storeOwner);
-    event shopOwnerDeleted(address _storeOwner);
-    event shopFrontCreated(uint _storeID, string _storeName, address _storeOwner, uint[] _storesInStoreOwner);
+    event storeOwnerAdded(address _storeOwner);
+    event storeOwnerDeleted(address _storeOwner);
+    event storeFrontCreated(uint _storeID, string _storeName, address _storeOwner, uint[] _storesInStoreOwner);
     event itemToSellAdded(uint _sku, uint _storeID, string _nameOfItem, uint _quantity, uint _price, uint[] _skusInStore);
     event itemPriceUpdated(uint _sku, uint _storeID, uint _newPrice);
     event itemForSaleDeleted(uint _storeID, uint _skuCode, uint[] _skusInStore);
-    event salesWithdrawn(uint _storeID, uint _payment);
+    event salesWithdrawn(uint _storeID, uint _payment, uint _storeSalesBalance);
     event refund(uint _refund);
     event itemBought(uint _skuCode, uint _quantity, uint _storeID, uint _price);
+    //event debugging(uint _itemInArray, uint _skuCode);
 
 
 
@@ -88,7 +85,7 @@ contract MarketPlace {
     }
 
     modifier checkQuantity(uint _quantity, uint _storeID, uint _skuCode) {
-        require(_quantity >= storeFront[_storeID].sku[_skuCode].quantity, "You are trying to purchase more items than are available");
+        require(_quantity <= storeFront[_storeID].sku[_skuCode].quantity, "You are trying to purchase more items than are available");
         _;
     }
 
@@ -102,14 +99,6 @@ contract MarketPlace {
         uint amountToRefund = msg.value - _price*_quantity;
         msg.sender.transfer(amountToRefund);
         emit refund(amountToRefund);
-    }
-
-
-
-    //Debugging
-
-    function numberOfStores() public view returns (uint) {
-        return storeCount;
     }
 
 
@@ -132,7 +121,7 @@ contract MarketPlace {
             //removing the empty index costs gas. There is no need to remove it as one 
             //counter is used to assign new sku's accross the entire marketplace.
             //This also ensures that a SKU cannot be reused, leading to disputes
-            emit adminAdded(_admin);
+            emit adminDeleted(_admin);
     }
 
 
@@ -144,7 +133,7 @@ contract MarketPlace {
         checkAdmin(adminsDB[msg.sender]) 
     {
             storeOwnersDB[_newStoreOwner].exists = true;
-            emit shopOwnerAdded(_newStoreOwner);
+            emit storeOwnerAdded(_newStoreOwner);
     }
 
     function deleteStoreOwner(address _deleteStoreOwner) 
@@ -155,7 +144,7 @@ contract MarketPlace {
             //removing the empty index costs gas. There is no need to remove it as one 
             //counter is used to assign new sku's accross the entire marketplace.
             //This also ensures that a SKU cannot be reused, leading to disputes
-            emit shopOwnerAdded(_deleteStoreOwner);
+            emit storeOwnerDeleted(_deleteStoreOwner);
     }
 
 
@@ -170,7 +159,7 @@ contract MarketPlace {
             storeFront[storeCount].storeName = _storeName;
             storeFront[storeCount].storeOwner = msg.sender;
             storeOwnersDB[msg.sender].storesInStoreOwner.push(storeCount);
-            emit shopFrontCreated(storeCount, _storeName, msg.sender, storeOwnersDB[msg.sender].storesInStoreOwner);
+            emit storeFrontCreated(storeCount, _storeName, msg.sender, storeOwnersDB[msg.sender].storesInStoreOwner);
     }
 
     function addItem(string memory _nameOfItem, uint _quantity, uint _price, uint _storeID) 
@@ -201,15 +190,19 @@ contract MarketPlace {
         checkOwnerOfStore(msg.sender, _storeID)
     {
             delete storeFront[_storeID].sku[_skuCode];
-            //removing the empty index costs gas. There is no need to remove it as one 
-            //counter is used to assign new sku's accross the entire marketplace.
-            //This also ensures that a SKU cannot be reused, leading to disputes
+
+            //An array is used to track skus that belong to a store.
+            //It is necessary to remove a sku and delete its position from this array so that the front
+            //end displays the correct number of items for sale in a shop. Order does not matter. The
+            //quickest way to delete an element from an array is to move the last item in the array into
+            //the deleted position, delete the last position, reduce len of array by 1 --> saves gas.
             uint len = storeFront[_storeID].skusInStore.length;
             for (uint k = 0; k < len; k++) {
                 if (storeFront[_storeID].skusInStore[k] == _skuCode) {
                     storeFront[_storeID].skusInStore[k] = storeFront[_storeID].skusInStore[len-1];
                     delete storeFront[_storeID].skusInStore[len -1];
                     storeFront[_storeID].skusInStore.length --;
+                    break;
                 }
             }
             emit itemForSaleDeleted(_storeID, _skuCode, storeFront[_storeID].skusInStore);
@@ -220,11 +213,11 @@ contract MarketPlace {
         checkStoreOwner(storeOwnersDB[msg.sender].exists)
         checkOwnerOfStore(msg.sender, _storeID)
     {
-            address payable ownerAddress = storeFront[_storeID].storeOwner;
+            address payable storeOwnerAddress = storeFront[_storeID].storeOwner;
             uint payment = storeFront[_storeID].pendingWithdrawal;
             storeFront[_storeID].pendingWithdrawal = 0; //Preventing reentrancy
-            ownerAddress.transfer(payment);
-            emit salesWithdrawn(_storeID, payment);
+            storeOwnerAddress.transfer(payment);
+            emit salesWithdrawn(_storeID, payment, storeFront[_storeID].pendingWithdrawal);
     }
 
 
