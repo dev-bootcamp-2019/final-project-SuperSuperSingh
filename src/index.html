@@ -13,7 +13,7 @@
   <body id="home" class="container text-center">
 
     <!--Contract Owner-->
-    <section id="welcomeView">
+    <section id="welcomeView" style="margin:30% 0 50% 0">
       <h1>Welcome to the decentralised online marketplace!</h1>
       <h3 id="accountAddress"></h3>
       <h3 id="numberOfStores"></h3>
@@ -25,7 +25,7 @@
 
 
     <!--Contract Owner-->
-    <section id="contractOwnerView">
+    <section id="contractOwnerView" style="margin-top:20%">
       <h1>Contract Owner dashboard</h1>
       <hr/>
 
@@ -44,7 +44,7 @@
 
 
     <!--Administrator-->
-    <section id="administratorView">
+    <section id="administratorView" style="margin-top:20%">
       <h1>Administrator dashboard</h1>
       <hr/>
 
@@ -60,7 +60,7 @@
 
 
     <!--Store Owner-->
-    <section id="storeOwnerView">
+    <section id="storeOwnerView" style="margin-top:20%">
       <h1>Store owner dashboard</h1>
       <input id="createStoreInput" placeholder="New store name"/>
       <button id="createStoreButton">Create Store</button>
@@ -91,36 +91,31 @@
 
 
     <!--Shopper-->
-    <section id="shopperSelectShop">
+    <section id="shopperSelectShop" style="margin-top:20%">
       <h1>Select a shop to browse</h1>
-      <table id="shopTable">
+      <table id="shopTable" class="table table-striped text-left">
         <tr>
-          
         </tr>
       </table>
-      <input id="selectedShop" placeholder="Enter number of shop to browse"/>
+      <input id="selectedShop" placeholder="Enter shop ID to browse"/>
       <button id="selectedShopButton">Go to shop</button>
     </section>
     
-    <section id="shopperShop">
+    <section id="shopperShop" style="margin-top:20%">
       <h1>Items for sale</h1>
-      <table id="forSaleTable">
+      <table id="forSaleTable" class="table table-striped text-left">
         <tr>
-          <th>Item</th>
-          <th>Quantity Available</th>
-          <th>Price per unit</th>
         </tr>
       </table>
 
       <input id="buySKU" placeholder="Item code to purchase"/>
       <input id="buyQuantity" placeholder="Quantity to buy"/>
       <button id="buyButton">Purchase</button>
-
-      buyItem(uint _quantity, uint _skuCode, uint _storeID) 
-
     </section>
 
-    <button id="logout">Log out</button>
+
+
+    <button id="logout" onClick="window.location.reload()">Log out</button>
 
 
     

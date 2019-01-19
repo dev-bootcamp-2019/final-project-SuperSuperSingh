@@ -6,63 +6,74 @@ $("#login").click(async function(){
   if (App.account == await marketplaceInstance.owner()) {
       alert("Logging in as Contract Owner");
       $("#contractOwnerView").show();
-      $("#administratorView").hide();
-      $("#storeOwnerView").hide();
-      $("#shopperSelectShop").hide();
       $("#welcomeView").hide();
       $("#logout").show();
   }
   else if(await marketplaceInstance.adminsDB.call(App.account) == true) {
       alert("Logging in as Marketplace Administrator");
-      $("#contractOwnerView").hide();
       $("#administratorView").show();
-      $("#storeOwnerView").hide();
-      $("#shopperSelectShop").hide();
       $("#welcomeView").hide();
       $("#logout").show();
   }
   else if(await marketplaceInstance.storeOwnersDB.call(App.account) == true) {
       alert("Logging in as Storefront Owner");
-      $("#contractOwnerView").hide();
-      $("#administratorView").hide();
       $("#storeOwnerView").show();
-      $("#shopperSelectShop").hide();
       $("#welcomeView").hide();
       $("#logout").show();
   }
   else {
       alert("Logging in as shopper");
-      $("#contractOwnerView").hide();
-      $("#administratorView").hide();
-      $("#storeOwnerView").hide();
       $("#shopperSelectShop").show();
       $("#welcomeView").hide();
       $("#logout").show();
 
+
+
+
+
+      //This only works because there is no deleteStore function. If this had to be taken into account, a more robust indexing method would be required to
+      //map the storeIDs to the store names for display purposes. For eg, deleting store with ID 5 in a list of 7 stores would leave a gap, so a loop from
+      //1 to 7 would display a empty line item. This can very easily be dealt with error handling.
       var noOfRows = await marketplaceInstance.storeCount();
-      console.log("Number of rows [%o]",noOfRows);
+      //console.log("Number of rows [%o]",noOfRows);
       
       $('#shopTable > tbody:last-child').append('<tr><th>Shop Name</th><th>Shop ID</th></tr>');
       for (let k = 1; k <= noOfRows; k++) {
         let storeFront = await marketplaceInstance.storeFront.call(k);
-        console.log("Store name is [%o][%o]",storeFront,k);
+        //console.log("Store name is [%o][%o]",storeFront,k);
         $('#shopTable > tbody:last-child').append('<tr><td>',storeFront[0],'</td><td>',k,'</td></tr>');
-        //$(function(){        
-          //var $button = $('.shopSelector').clone();
-          //$button.val() = await marketplaceInstance.storeFront.call(k).storeName + "Shop ID: " + k;
-          //$('#shopperSelectShop').html($button);
-        //});
       }
+
+
+
+
+
+
       $("#selectedShopButton").click(async function(){
         selectedShop = $("#selectedShop").val();
 
         $("#shopperSelectShop").hide();
         $("#shopperShop").show();
 
-        var noOfRows = await marketplaceInstance.storeFront.call(selectedShop).sku.length();
+        $('#forSaleTable > tbody:last-child').append('<tr><th>Item Name</th><th>Item SKU</th></th><th>Quantity available</th></th><th>Price per unit</th></tr>');
+        //let noOfRows = await marketplaceInstance.storeFront.call(selectedShop);
+        //let nextLevel = noOfRows[3];
+        let noOfRows = await marketplaceInstance.getLatestSKU(selectedShop);
+        console.log("no of rows: ", noOfRows);
+        //console.log("Items table [%o]");
 
         for (var k = 1; k <= noOfRows; k++) {
-          $('#forSaleTable > tbody:last-child').append('<tr><td>',marketplaceInstance.storeFront.call(selectedShop).sku.call(k).name,'</td><td>',marketplaceInstance.storeFront.call(selectedShop).sku.call(k).quantity,'</td><td>',marketplaceInstance.storeFront.call(selectedShop).sku.call(k).price,'</td></tr>');
+          let item = await marketplaceInstance.getItemInShop(selectedShop, k);
+          if (item[0] !== undefined) {
+            console.log("Item details %o", item);
+            $('#forSaleTable > tbody:last-child').append('<tr><td>',item[0],'</td><td>',item[1],'</td><td>',item[2],'</td></tr>');
+          }
+          /*let itemName = await marketplaceInstance.getItemInShopName(selectedShop, k);
+          if (itemName !== undefined) {
+            let itemQuantity = await marketplaceInstance.getItemInShopQuantity(selectedShop, k);
+            let itemPrice = await marketplaceInstance.getItemInShopPrice(selectedShop, k);
+            console.log("Item details %o", itemQuantity, itemPrice, itemName);
+            $('#forSaleTable > tbody:last-child').append('<tr><td>',itemName,'</td><td>',k,'</td><td>',itemQuantity[0],'</td><td>',itemPrice[0],'</td></tr>');*/  
         }
       })
       
@@ -72,14 +83,6 @@ $("#login").click(async function(){
 
 $("#logout").click(function(){
   alert("Logging out");
-  $("#contractOwnerView").hide();
-  $("#administratorView").hide();
-  $("#storeOwnerView").hide();
-  $("#shopperSelectShop").hide();
-  $("#shopperShop").hide();
-  $("#shopTable tbody tr").remove();
-  $("#forSaleTable tbody tr").remove();
-  $("#welcomeView").show();
 })
 
 $("#addAdminButton").click(async function() { 
@@ -199,14 +202,13 @@ App = {
     loader.show();
 
     // Load account data
-    web3.eth.getCoinbase(function(err, account) {
+    web3.eth.getCoinbase(async function(err, account) {
       if (err === null) {
         App.account = account;
         if (account == null) {
           account = "No account found. Please log into Metamask or use test wallet";
         }
         $("#accountAddress").html("Your Account: " + account);
-        //$("#accountBalance").html("Your Balance: " + web3.eth.getBalance(App.account));
       }
     });
 
@@ -226,7 +228,7 @@ App = {
 
 $(function() {
   $(window).load(function() {
-    $("#storeOwnerView").hide(); //Is this the best way of hiding inactive views?
+    $("#storeOwnerView").hide();
     $("#administratorView").hide();
     $("#contractOwnerView").hide();
     $("#shopperSelectShop").hide();

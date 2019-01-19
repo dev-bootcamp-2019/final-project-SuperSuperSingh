@@ -1,15 +1,15 @@
-Truffle tests - 5 remaining
-Error handling
-Libraries - Ownable and overflows
-Additional
-Readmes
-Design patterns
+20th Truffle tests - 5 remaining
+20th Error handling
+21st Libraries - Ownable and overflows
+23rd Additional
+23rd Readmes
+23rd Design patterns
 Avoiding common attacks module 9 lesson 3
-Comments
-Updates reflected in UI
-Design patterns - implement a circuit breaker
-Deploy to testnet - inlucde document on where the contract lives https://etherscan.io/verifyContract
-https://www.myetherwallet.com/#contracts
+24th Comments
+21st Updates reflected in UI
+22nd Design patterns - implement a circuit breaker
+24th Deploy to testnet - inlucde document on where the contract lives https://etherscan.io/verifyContract
+24th https://www.myetherwallet.com/#contracts
 
 Not required:
 Implement upgradeable design pattern
@@ -18,4 +18,4 @@ uPort
 ENS
 Oracle
 
-Individual chapter exercises
+23rd Individual chapter exercises

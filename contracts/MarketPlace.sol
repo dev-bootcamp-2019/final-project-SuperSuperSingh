@@ -10,12 +10,14 @@ contract MarketPlace {
     address public owner;
     uint public storeCount = 0;
     uint public skuCount = 0;
+    //uint[] public listOfStoreIDs;
 
     //Struct to hold details about each item for sale in a particular store
     struct ItemForSale {
         string name;
         uint quantity;
         uint price;
+        //bool exists;
     }
 
     struct StoreFronts {
@@ -23,6 +25,7 @@ contract MarketPlace {
         uint[] skusInStore;
         address payable storeOwner; //Address to cross check that the store owner is calling the function
         uint pendingWithdrawal; //Total sales value of store
+        uint latestSkuNoInStore;
         mapping(uint => ItemForSale) sku; //Mapping of all stock being sold by a particular store
     }
 
@@ -50,7 +53,7 @@ contract MarketPlace {
     event salesWithdrawn(uint _storeID, uint _payment, uint _storeSalesBalance);
     event refund(uint _refund);
     event itemBought(uint _skuCode, uint _quantity, uint _storeID, uint _price);
-    //event debugging(uint _itemInArray, uint _skuCode);
+    //event debugging(uint[] _listOfStoreIDs);
 
 
 
@@ -159,6 +162,8 @@ contract MarketPlace {
             storeFront[storeCount].storeName = _storeName;
             storeFront[storeCount].storeOwner = msg.sender;
             storeOwnersDB[msg.sender].storesInStoreOwner.push(storeCount);
+            //listOfStoreIDs.push(storeCount);
+            //emit debugging(listOfStoreIDs);
             emit storeFrontCreated(storeCount, _storeName, msg.sender, storeOwnersDB[msg.sender].storesInStoreOwner);
     }
 
@@ -171,7 +176,10 @@ contract MarketPlace {
             storeFront[_storeID].sku[skuCount].name = _nameOfItem;
             storeFront[_storeID].sku[skuCount].quantity = _quantity;
             storeFront[_storeID].sku[skuCount].price = _price;
+            //storeFront[_storeID].sku[skuCount].exists = true;
             storeFront[_storeID].skusInStore.push(skuCount);
+            storeFront[_storeID].latestSkuNoInStore = skuCount;
+            
             emit itemToSellAdded(skuCount, _storeID, _nameOfItem, _quantity, _price, storeFront[_storeID].skusInStore);
     }
 
@@ -234,4 +242,50 @@ contract MarketPlace {
             storeFront[_storeID].pendingWithdrawal += (storeFront[_storeID].sku[_skuCode].price*_quantity);
             emit itemBought(_skuCode, _quantity, _storeID, storeFront[_storeID].sku[_skuCode].price);
     }
+
+
+
+    //Getters
+    function getLatestSKU(uint _storeID) 
+        public
+        view
+        returns (uint)
+    {
+        return storeFront[_storeID].latestSkuNoInStore;
+    }
+
+    function getItemInShop(uint _storeID, uint _sku)
+        public
+        view
+        returns (string memory, uint, uint)
+    {
+        string memory itemName = storeFront[_storeID].sku[_sku].name;
+        uint itemQuantity = storeFront[_storeID].sku[_sku].quantity;
+        uint itemPrice = storeFront[_storeID].sku[_sku].price;
+        return (itemName, itemQuantity, itemPrice);
+    }
+    
+    /*function getItemInShopName(uint _storeID, uint _sku)
+        public
+        view
+        returns (string memory)
+    {
+        return storeFront[_storeID].sku[_sku].name;
+    }
+
+    function getItemInShopQuantity(uint _storeID, uint _sku)
+        public
+        view
+        returns (uint)
+    {
+        return storeFront[_storeID].sku[_sku].quantity;
+    }
+            
+    function getItemInShopPrice(uint _storeID, uint _sku)
+        public
+        view
+        returns (uint)
+    {
+        return storeFront[_storeID].sku[_sku].price;
+    }*/
 }
