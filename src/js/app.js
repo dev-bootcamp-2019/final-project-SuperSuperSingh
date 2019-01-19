@@ -40,8 +40,13 @@ $("#login").click(async function(){
       $("#logout").show();
 
       var noOfRows = await marketplaceInstance.storeCount();
-      for (var k = 1; k <= noOfRows; k++) {
-        $('#shopTable > tbody:last-child').append('<tr><td>',marketplaceInstance.storeFront.call(k).storeName,'</td><td>',k,'</td></tr>');
+      console.log("Number of rows [%o]",noOfRows);
+      
+      $('#shopTable > tbody:last-child').append('<tr><th>Shop Name</th><th>Shop ID</th></tr>');
+      for (let k = 1; k <= noOfRows; k++) {
+        let storeFront = await marketplaceInstance.storeFront.call(k);
+        console.log("Store name is [%o][%o]",storeFront,k);
+        $('#shopTable > tbody:last-child').append('<tr><td>',storeFront[0],'</td><td>',k,'</td></tr>');
         //$(function(){        
           //var $button = $('.shopSelector').clone();
           //$button.val() = await marketplaceInstance.storeFront.call(k).storeName + "Shop ID: " + k;
@@ -72,6 +77,8 @@ $("#logout").click(function(){
   $("#storeOwnerView").hide();
   $("#shopperSelectShop").hide();
   $("#shopperShop").hide();
+  $("#shopTable tbody tr").remove();
+  $("#forSaleTable tbody tr").remove();
   $("#welcomeView").show();
 })
 

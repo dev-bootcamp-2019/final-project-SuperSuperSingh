@@ -21,23 +21,17 @@ contract MarketPlace {
         uint quantity;
         uint price;
     }
-
+    
     struct StoreFronts {
         string storeName; //Struct containing store name to display on UI
-        uint[] skusInStore;
         address payable storeOwner; //Address to cross check that the store owner is calling the function
         uint pendingWithdrawal; //Total sales value of store
         mapping(uint => ItemForSale) sku; //Mapping of all stock being sold by a particular store
     }
 
-    struct StoreOwnersDB {
-        bool exists;
-        uint[] storesInStoreOwner;
-    }
-
     //used a mapping as opposed to an array to avoid use of a loop to find matches
     mapping(address => bool) public adminsDB; //mapping of admins by address
-    mapping(address => StoreOwnersDB) public storeOwnersDB; //mapping of store owners by address
+    mapping(address => bool) public storeOwnersDB; //mapping of store owners by address
     mapping(uint => StoreFronts) public storeFront;
 
 
@@ -47,10 +41,10 @@ contract MarketPlace {
     event adminDeleted(address _admin);
     event shopOwnerAdded(address _storeOwner);
     event shopOwnerDeleted(address _storeOwner);
-    event shopFrontCreated(uint _storeID, string _storeName, address _storeOwner, uint[] _storesInStoreOwner);
-    event itemToSellAdded(uint _sku, uint _storeID, string _nameOfItem, uint _quantity, uint _price, uint[] _skusInStore);
+    event shopFrontCreated(uint _storeID, string _storeName, address _storeOwner);
+    event itemToSellAdded(uint _sku, uint _storeID, string _nameOfItem, uint _quantity, uint _price);
     event itemPriceUpdated(uint _sku, uint _storeID, uint _newPrice);
-    event itemForSaleDeleted(uint _storeID, uint _skuCode, uint[] _skusInStore);
+    event itemForSaleDeleted(uint _storeID, uint _skuCode);
     event salesWithdrawn(uint _storeID, uint _payment);
     event refund(uint _refund);
     event itemBought(uint _skuCode, uint _quantity, uint _storeID, uint _price);
@@ -143,7 +137,7 @@ contract MarketPlace {
         public 
         checkAdmin(adminsDB[msg.sender]) 
     {
-            storeOwnersDB[_newStoreOwner].exists = true;
+            storeOwnersDB[_newStoreOwner] = true;
             emit shopOwnerAdded(_newStoreOwner);
     }
 
@@ -164,31 +158,29 @@ contract MarketPlace {
 
     function createStoreFront(string memory _storeName) 
         public 
-        checkStoreOwner(storeOwnersDB[msg.sender].exists) 
+        checkStoreOwner(storeOwnersDB[msg.sender]) 
     {
             storeCount ++;
             storeFront[storeCount].storeName = _storeName;
             storeFront[storeCount].storeOwner = msg.sender;
-            storeOwnersDB[msg.sender].storesInStoreOwner.push(storeCount);
-            emit shopFrontCreated(storeCount, _storeName, msg.sender, storeOwnersDB[msg.sender].storesInStoreOwner);
+            emit shopFrontCreated(storeCount, _storeName, msg.sender);
     }
 
     function addItem(string memory _nameOfItem, uint _quantity, uint _price, uint _storeID) 
         public 
-        checkStoreOwner(storeOwnersDB[msg.sender].exists)
+        checkStoreOwner(storeOwnersDB[msg.sender])
         checkOwnerOfStore(msg.sender, _storeID)
     {
             skuCount ++;
             storeFront[_storeID].sku[skuCount].name = _nameOfItem;
             storeFront[_storeID].sku[skuCount].quantity = _quantity;
             storeFront[_storeID].sku[skuCount].price = _price;
-            storeFront[_storeID].skusInStore.push(skuCount);
-            emit itemToSellAdded(skuCount, _storeID, _nameOfItem, _quantity, _price, storeFront[_storeID].skusInStore);
+            emit itemToSellAdded(skuCount, _storeID, _nameOfItem, _quantity, _price);
     }
 
     function changePrice(uint _skuCode, uint _storeID, uint _newPrice) 
         public 
-        checkStoreOwner(storeOwnersDB[msg.sender].exists)
+        checkStoreOwner(storeOwnersDB[msg.sender])
         checkOwnerOfStore(msg.sender, _storeID)
     {
             storeFront[_storeID].sku[_skuCode].price = _newPrice;
@@ -197,27 +189,19 @@ contract MarketPlace {
 
     function deleteItem(uint _storeID, uint _skuCode)
         public 
-        checkStoreOwner(storeOwnersDB[msg.sender].exists)
+        checkStoreOwner(storeOwnersDB[msg.sender])
         checkOwnerOfStore(msg.sender, _storeID)
     {
             delete storeFront[_storeID].sku[_skuCode];
             //removing the empty index costs gas. There is no need to remove it as one 
             //counter is used to assign new sku's accross the entire marketplace.
             //This also ensures that a SKU cannot be reused, leading to disputes
-            uint len = storeFront[_storeID].skusInStore.length;
-            for (uint k = 0; k < len; k++) {
-                if (storeFront[_storeID].skusInStore[k] == _skuCode) {
-                    storeFront[_storeID].skusInStore[k] = storeFront[_storeID].skusInStore[len-1];
-                    delete storeFront[_storeID].skusInStore[len -1];
-                    storeFront[_storeID].skusInStore.length --;
-                }
-            }
-            emit itemForSaleDeleted(_storeID, _skuCode, storeFront[_storeID].skusInStore);
+            emit itemForSaleDeleted(_storeID, _skuCode);
     }
 
     function withdrawSales(uint _storeID) 
         public 
-        checkStoreOwner(storeOwnersDB[msg.sender].exists)
+        checkStoreOwner(storeOwnersDB[msg.sender])
         checkOwnerOfStore(msg.sender, _storeID)
     {
             address payable ownerAddress = storeFront[_storeID].storeOwner;

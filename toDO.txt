@@ -1,0 +1,21 @@
+Truffle tests - 5 remaining
+Error handling
+Libraries
+Additional
+Readmes
+Design patterns
+Avoiding common attacks module 9 lesson 3
+Comments
+Updates reflected in UI
+Design patterns - implement a circuit breaker
+Deploy to testnet - inlucde document on where the contract lives https://etherscan.io/verifyContract
+https://www.myetherwallet.com/#contracts
+
+Not required:
+Implement upgradeable design pattern
+IPFS
+uPort
+ENS
+Oracle
+
+Individual chapter exercises
