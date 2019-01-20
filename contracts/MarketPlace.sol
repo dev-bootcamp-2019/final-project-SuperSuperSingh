@@ -79,7 +79,7 @@ contract MarketPlace is Ownable {
     }
 
     modifier paidEnough(uint _quantity, uint _price) {
-        require(msg.value >= _price*_quantity, "You have not tendered the correct amount.");
+        require(msg.value >= _price*_quantity, "You have not tendered the incorrect amount.");
         _;
     }
 
@@ -308,14 +308,13 @@ contract MarketPlace is Ownable {
             return (isName, isQuantity, isPrice);
     }
 
-    /*function isItemBought(uint _storeID)
+    function isItemBought(uint _currentStoreID, uint _currentSKU)
         public
         view
-        returns (uint storeBalance)
+        returns (uint newQuantity)
     {
-            storeBalance = storeFront[_storeID].pendingWithdrawal;
-            return storeBalance;
-    }*/
+            return newQuantity = storeFront[_currentStoreID].sku[_currentSKU].quantity;
+    }
 
     function fetchStoreBalance (uint _storeID)
         public
