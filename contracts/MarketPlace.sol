@@ -5,19 +5,19 @@ Implement Eth/USD price
 
 pragma solidity 0.5.0;
 
-contract MarketPlace {
+import "./Ownable.sol";
+import "./SafeMath.sol";
 
-    address public owner;
+contract MarketPlace is Ownable {
+
     uint public storeCount = 0;
     uint public skuCount = 0;
-    //uint[] public listOfStoreIDs;
 
     //Struct to hold details about each item for sale in a particular store
     struct ItemForSale {
         string name;
         uint quantity;
         uint price;
-        //bool exists;
     }
 
     struct StoreFronts {
@@ -53,24 +53,10 @@ contract MarketPlace {
     event salesWithdrawn(uint _storeID, uint _payment, uint _storeSalesBalance);
     event refund(uint _refund);
     event itemBought(uint _skuCode, uint _quantity, uint _storeID, uint _price);
-    //event debugging(uint[] _listOfStoreIDs);
-
-
-
-    //Constructor
-
-    constructor () public {
-        owner = msg.sender;
-    }
 
 
 
     //Modifiers
-
-    modifier checkContractOwner() {
-        require(msg.sender == owner, "This function is only available to the contract owner");
-        _;
-    }
 
     modifier checkAdmin(bool _exists) {
         require(_exists, "This function is only available to administrators");
@@ -110,7 +96,7 @@ contract MarketPlace {
 
     function addAdmin(address _admin) 
         public 
-        checkContractOwner() 
+        onlyOwner() 
     {
         adminsDB[_admin] = true;
         emit adminAdded(_admin);
@@ -118,12 +104,9 @@ contract MarketPlace {
 
     function deleteAdmin(address _admin) 
         public 
-        checkContractOwner() 
+        onlyOwner() 
     {
             delete adminsDB[_admin];
-            //removing the empty index costs gas. There is no need to remove it as one 
-            //counter is used to assign new sku's accross the entire marketplace.
-            //This also ensures that a SKU cannot be reused, leading to disputes
             emit adminDeleted(_admin);
     }
 
@@ -144,9 +127,6 @@ contract MarketPlace {
         checkAdmin(adminsDB[msg.sender]) 
     {
             delete storeOwnersDB[_deleteStoreOwner];
-            //removing the empty index costs gas. There is no need to remove it as one 
-            //counter is used to assign new sku's accross the entire marketplace.
-            //This also ensures that a SKU cannot be reused, leading to disputes
             emit storeOwnerDeleted(_deleteStoreOwner);
     }
 
@@ -158,12 +138,10 @@ contract MarketPlace {
         public 
         checkStoreOwner(storeOwnersDB[msg.sender].exists) 
     {
-            storeCount ++;
+            storeCount = SafeMath.add(storeCount, 1);
             storeFront[storeCount].storeName = _storeName;
             storeFront[storeCount].storeOwner = msg.sender;
             storeOwnersDB[msg.sender].storesInStoreOwner.push(storeCount);
-            //listOfStoreIDs.push(storeCount);
-            //emit debugging(listOfStoreIDs);
             emit storeFrontCreated(storeCount, _storeName, msg.sender, storeOwnersDB[msg.sender].storesInStoreOwner);
     }
 
@@ -172,11 +150,10 @@ contract MarketPlace {
         checkStoreOwner(storeOwnersDB[msg.sender].exists)
         checkOwnerOfStore(msg.sender, _storeID)
     {
-            skuCount ++;
+            skuCount = SafeMath.add(skuCount, 1);
             storeFront[_storeID].sku[skuCount].name = _nameOfItem;
             storeFront[_storeID].sku[skuCount].quantity = _quantity;
             storeFront[_storeID].sku[skuCount].price = _price;
-            //storeFront[_storeID].sku[skuCount].exists = true;
             storeFront[_storeID].skusInStore.push(skuCount);
             storeFront[_storeID].latestSkuNoInStore = skuCount;
             
@@ -288,4 +265,73 @@ contract MarketPlace {
     {
         return storeFront[_storeID].sku[_sku].price;
     }*/
+
+
+
+    //Testing
+    function fetchAdmin(address _isAdmin) 
+        public
+        view
+        returns (bool newAdminExists)
+    {
+            newAdminExists = adminsDB[_isAdmin];
+            return newAdminExists;
+    }
+
+    function fetchStoreOwner(address _isStoreOwner)
+        public
+        view
+        returns (bool newStoreOwner)
+    {
+            newStoreOwner = storeOwnersDB[_isStoreOwner].exists;
+            return newStoreOwner;
+    }
+
+    function fetchStoreID(uint _storeID)
+        public
+        view
+        returns (address newStoreOwnerAddress, string memory storeNameAdded)
+    {
+            newStoreOwnerAddress = storeFront[_storeID].storeOwner;
+            storeNameAdded = storeFront[_storeID].storeName;
+            return (newStoreOwnerAddress, storeNameAdded);
+    }
+
+    function fetchItem(uint _storeID, uint _skuCode)
+        public
+        view
+        returns (string memory isName, uint isQuantity, uint isPrice)
+    {
+            isName = storeFront[_storeID].sku[_skuCode].name;
+            isQuantity = storeFront[_storeID].sku[_skuCode].quantity;
+            isPrice = storeFront[_storeID].sku[_skuCode].price;
+            return (isName, isQuantity, isPrice);
+    }
+
+    /*function isItemBought(uint _storeID)
+        public
+        view
+        returns (uint storeBalance)
+    {
+            storeBalance = storeFront[_storeID].pendingWithdrawal;
+            return storeBalance;
+    }*/
+
+    function fetchStoreBalance (uint _storeID)
+        public
+        view
+        returns (uint storeBalance)
+    {
+            storeBalance = storeFront[_storeID].pendingWithdrawal;
+            return storeBalance;
+    }
+
+    function fetchSalesWithdrawn(uint _storeID)
+        public
+        view
+        returns (uint storeBalance)
+    {
+            storeBalance = storeFront[_storeID].pendingWithdrawal;
+            return storeBalance;
+    }
 }
