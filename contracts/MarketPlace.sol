@@ -1,13 +1,20 @@
 /*
 Questions:
 Implement Eth/USD price
+
+How do you read a mapping, an item within a struct within a mapping
+How do you use event emissions
+
 Can I move the test functions out of this contract? How?
-I used ownable and now the js cannot read who owns the contract. How do I fix this?
 Test failling if I try read certain information.
+
 why is owner private in ownable. I changed it to internal because I need it in this contract.
+I used ownable and now the js cannot read who owns the contract. How do I fix this?
+
 Why can't I withdraw contract balance to owner (circuit breaker)
 Why do I sometimes have an issue migrating and sometimes not? I have to enable optimizer
-How do you actually make the payment?
+How do you actually make the payment? My function isn't working
+I created a new VM and it doesnt work there, but here it does. Why?
 */
 
 pragma solidity 0.5.0;

@@ -36,6 +36,11 @@
       <input id="deleteAdminInput" placeholder="Address of administrator to delete"/>
       <button id="deleteAdminButton">Delete administrator</button>
       <hr/>
+      
+      <table id="administratorsTable" class="table text-left">
+        <tr>
+        </tr>
+      </table>
 
       <p>Total revenue of marketplace</p>
       <hr/>
@@ -93,7 +98,7 @@
     <!--Shopper-->
     <section id="shopperSelectShop" style="margin-top:20%">
       <h1>Select a shop to browse</h1>
-      <table id="shopTable" class="table table-striped text-left">
+      <table id="shopTable" class="table text-left">
         <tr>
         </tr>
       </table>
@@ -103,13 +108,18 @@
     
     <section id="shopperShop" style="margin-top:20%">
       <h1>Items for sale</h1>
-      <table id="forSaleTable" class="table table-striped text-left">
+      <table id="forSaleTable" class="table text-left">
         <tr>
         </tr>
       </table>
 
+      <!--div id="forSaleDiv">
+
+      </div-->
+
       <input id="buySKU" placeholder="Item code to purchase"/>
       <input id="buyQuantity" placeholder="Quantity to buy"/>
+      <input id="payment" placeholder="Payment value in wei"/>
       <button id="buyButton">Purchase</button>
     </section>
 

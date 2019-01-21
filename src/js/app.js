@@ -8,6 +8,8 @@ $("#login").click(async function(){
       $("#contractOwnerView").show();
       $("#welcomeView").hide();
       $("#logout").show();
+      //let administrators = marketplaceInstance.adminsDB;
+      //console.log("administrators: [%o]", administrators);
   }
   else if(await marketplaceInstance.adminsDB.call(App.account) == true) {
       alert("Logging in as Marketplace Administrator");
@@ -62,11 +64,13 @@ $("#login").click(async function(){
         console.log("no of rows: ", noOfRows);
         //console.log("Items table [%o]");
 
+        //debugger;
         for (var k = 1; k <= noOfRows; k++) {
           let item = await marketplaceInstance.getItemInShop(selectedShop, k);
-          if (item[0] !== undefined) {
+          if (item[0] !== "") {
             console.log("Item details %o", item);
-            $('#forSaleTable > tbody:last-child').append('<tr><td>',item[0],'</td><td>',item[1],'</td><td>',item[2],'</td></tr>');
+            $('#forSaleTable > tbody:last-child').append('<tr><td>',item[0],'</td><td>',k,'</td><td>',item[1].toString(),'</td><td>',item[2].toString(),'</td></tr>');
+            //$("#forSaleDiv").html(item[0], "    ", k, "    ", item[1].toString(), "    ", item[2].string())
           }
           /*let itemName = await marketplaceInstance.getItemInShopName(selectedShop, k);
           if (itemName !== undefined) {
@@ -77,7 +81,7 @@ $("#login").click(async function(){
         }
       })
       
-
+    
   }
 })
 
@@ -85,11 +89,35 @@ $("#logout").click(function(){
   alert("Logging out");
 })
 
+function redrawTable (_administrator) {
+  
+}
+
+/*function waitForReceipt(txHash, cb){
+  web3.eth.getTransactionReceipt(txHash, function(error, receipt){
+    if(error){
+      alert(error);
+    }
+    else if(receipt !== null) {
+      cb(receipt);
+    }
+    else{
+      window.setTimeout(function(){
+        waitForReceipt(txHash, cb);
+      },5000);
+    }
+  });
+}*/
+
+
 $("#addAdminButton").click(async function() { 
   console.log("Attempted to add admin");
   var adminAddressToAdd = $("#addAdminInput").val();
   var result = await marketplaceInstance.addAdmin(adminAddressToAdd);
   console.log(result);
+
+  let administrators = marketplaceInstance.adminsDB;
+  console.log("administrators: %o");
 
   /*try {
     console.log("Attempted to add admin");
@@ -103,7 +131,21 @@ $("#addAdminButton").click(async function() {
 $("#deleteAdminButton").click(function() {
   console.log("Attempted to delete admin");
   var adminAddressToDelete = $("#deleteAdminInput").val();
-  marketplaceInstance.deleteAdmin(adminAddressToDelete);
+  marketplaceInstance.deleteAdmin(adminAddressToDelete);/*, function(error, txHash){
+      if(error){
+        alert(error);
+      }
+      else{
+          waitForReceipt(txHash, function(receipt){
+            if(receipt.status === "0x1"){
+              alert("Administrator with address ", txHash, " added");
+            }
+            else{
+              alert("adding administrator failed");
+            }
+          });
+      }
+    })*/
 })
 
 $("#addStoreOwnerButton").click(function() {
@@ -157,8 +199,9 @@ $("buyButton").click(function(){
   console.log("Attempted to purchase item");
   var buySKU = $("#buySKU").val();
   var buyQuantity = $("#buyQuantity").val();
+  var payment = parseInt($("#payment").val());
   var buyStoreID = selectedShop;
-  marketplaceInstance.buyItem(buyQuantity, buySKU, buyStoreID);
+  marketplaceInstance.buyItem(buyQuantity, buySKU, buyStoreID, {from: accounts[0], gas:100000, value: val}); //This isn't working
 })
 
 
