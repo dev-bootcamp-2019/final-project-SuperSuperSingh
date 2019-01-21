@@ -1,6 +1,13 @@
 /*
 Questions:
 Implement Eth/USD price
+Can I move the test functions out of this contract? How?
+I used ownable and now the js cannot read who owns the contract. How do I fix this?
+Test failling if I try read certain information.
+why is owner private in ownable. I changed it to internal because I need it in this contract.
+Why can't I withdraw contract balance to owner (circuit breaker)
+Why do I sometimes have an issue migrating and sometimes not? I have to enable optimizer
+How do you actually make the payment?
 */
 
 pragma solidity 0.5.0;
@@ -12,6 +19,7 @@ contract MarketPlace is Ownable {
 
     uint public storeCount = 0;
     uint public skuCount = 0;
+    bool public stopped = false;
 
     //Struct to hold details about each item for sale in a particular store
     struct ItemForSale {
@@ -68,8 +76,8 @@ contract MarketPlace is Ownable {
         _;
     }
 
-    modifier checkOwnerOfStore(address _owner, uint _storeID) {
-        require (_owner == storeFront[_storeID].storeOwner, "You cannot interact with this store as you are not the owner");
+    modifier checkOwnerOfStore(address _storeOwner, uint _storeID) {
+        require (_storeOwner == storeFront[_storeID].storeOwner, "You cannot interact with this store as you are not the owner");
         _;
     }
 
@@ -88,6 +96,21 @@ contract MarketPlace is Ownable {
         uint amountToRefund = msg.value - _price*_quantity;
         msg.sender.transfer(amountToRefund);
         emit refund(amountToRefund);
+    }
+
+    modifier checkInt(uint _valueToCheck, uint _checkAgainst) {
+        require(_valueToCheck <= _checkAgainst);
+        _;
+    }
+
+    modifier stopInEmergency {
+        require(!stopped);
+        _;
+    }
+
+    modifier onlyInEmergency {
+        require(stopped);
+        _;
     }
 
 
@@ -110,13 +133,27 @@ contract MarketPlace is Ownable {
             emit adminDeleted(_admin);
     }
 
+    function activateEmergencyStop()
+        public
+        onlyOwner()
+    {
+        stopped = true;
+    }
+
+    function withdrawAllFunds()
+        public
+        onlyOwner()
+        onlyInEmergency() 
+    {
+        //_owner.transfer(address(this).balance);
+    }
 
 
     //Admin functions
 
     function addStoreOwner(address _newStoreOwner) 
         public 
-        checkAdmin(adminsDB[msg.sender]) 
+        checkAdmin(adminsDB[msg.sender])
     {
             storeOwnersDB[_newStoreOwner].exists = true;
             emit storeOwnerAdded(_newStoreOwner);
@@ -149,6 +186,7 @@ contract MarketPlace is Ownable {
         public 
         checkStoreOwner(storeOwnersDB[msg.sender].exists)
         checkOwnerOfStore(msg.sender, _storeID)
+        stopInEmergency()
     {
             skuCount = SafeMath.add(skuCount, 1);
             storeFront[_storeID].sku[skuCount].name = _nameOfItem;
@@ -164,6 +202,8 @@ contract MarketPlace is Ownable {
         public 
         checkStoreOwner(storeOwnersDB[msg.sender].exists)
         checkOwnerOfStore(msg.sender, _storeID)
+        stopInEmergency()
+        checkInt(_skuCode, skuCount)
     {
             storeFront[_storeID].sku[_skuCode].price = _newPrice;
             emit itemPriceUpdated(_skuCode, _storeID, _newPrice);
@@ -173,6 +213,7 @@ contract MarketPlace is Ownable {
         public 
         checkStoreOwner(storeOwnersDB[msg.sender].exists)
         checkOwnerOfStore(msg.sender, _storeID)
+        checkInt(_skuCode, skuCount)
     {
             delete storeFront[_storeID].sku[_skuCode];
 
@@ -197,6 +238,7 @@ contract MarketPlace is Ownable {
         public 
         checkStoreOwner(storeOwnersDB[msg.sender].exists)
         checkOwnerOfStore(msg.sender, _storeID)
+        stopInEmergency()
     {
             address payable storeOwnerAddress = storeFront[_storeID].storeOwner;
             uint payment = storeFront[_storeID].pendingWithdrawal;
@@ -214,6 +256,8 @@ contract MarketPlace is Ownable {
         checkQuantity(_quantity, _storeID, _skuCode)
         paidEnough(_quantity, storeFront[_storeID].sku[_skuCode].price)
         checkValue(_quantity, storeFront[_storeID].sku[_skuCode].price)
+        stopInEmergency()
+
     {
             storeFront[_storeID].sku[_skuCode].quantity -= _quantity;
             storeFront[_storeID].pendingWithdrawal += (storeFront[_storeID].sku[_skuCode].price*_quantity);
