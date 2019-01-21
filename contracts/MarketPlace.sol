@@ -152,7 +152,7 @@ contract MarketPlace is Ownable {
         onlyOwner()
         onlyInEmergency() 
     {
-        //_owner.transfer(address(this).balance);
+        _owner.transfer(address(this).balance);
     }
 
 
