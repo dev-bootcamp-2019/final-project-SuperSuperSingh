@@ -38,8 +38,10 @@
       <hr/>
       
       <table id="administratorsTable" class="table text-left">
-        <tr>
-        </tr>
+        <tbody>
+          <tr>
+          </tr>
+        </tbody>
       </table>
 
       <p>Total revenue of marketplace</p>
@@ -86,11 +88,25 @@
 
       <input id="skuToDelete" placeholder="SKU"/>
       <input id="skuShopIDToDelete" placeholder="Shop ID"/>
-      <button id="changePriceButton">Delete item</button>
+      <button id="deleteItemButton">Delete item</button>
       <hr/>
 
       <input id="shopIDtoWithdrawFrom" placeholder="Shop ID"/>
       <button id="withdrawButton">Withdraw sales</button>
+      <hr/>
+
+      <button id="refreshPage">Refresh tables</button>
+      <hr/>
+
+      <h1>Your shops</h1>
+      <div id="ownerTablePos">
+        <table id="ownerTable" class="table text-left">
+          <tbody>
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <hr/>
     </section>
 
@@ -99,18 +115,22 @@
     <section id="shopperSelectShop" style="margin-top:20%">
       <h1>Select a shop to browse</h1>
       <table id="shopTable" class="table text-left">
-        <tr>
-        </tr>
+        <tbody>
+          <tr>
+          </tr>
+        </tbody>
       </table>
       <input id="selectedShop" placeholder="Enter shop ID to browse"/>
       <button id="selectedShopButton">Go to shop</button>
     </section>
     
     <section id="shopperShop" style="margin-top:20%">
-      <h1>Items for sale</h1>
+      <h1 id="shopperHeading"></h1>
       <table id="forSaleTable" class="table text-left">
-        <tr>
-        </tr>
+        <tbody>
+          <tr>
+          </tr>
+        </tbody>
       </table>
 
       <!--div id="forSaleDiv">

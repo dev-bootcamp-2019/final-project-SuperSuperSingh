@@ -1,13 +1,13 @@
-20th Truffle tests - 5 remaining
+Done 20th Truffle tests - 5 remaining
 20th Error handling
-21st Libraries - Ownable and overflows
+Done 21st Libraries - Ownable and overflows
 23rd Additional
 23rd Readmes
 23rd Design patterns
 Avoiding common attacks module 9 lesson 3
 24th Comments
 21st Updates reflected in UI - Shop Owner shop see a table with shop and another table with items in shop, error checking, message boxes
-22nd Design patterns - implement a circuit breaker
+Done 22nd Design patterns - implement a circuit breaker
 24th Deploy to testnet - inlucde document on where the contract lives https://etherscan.io/verifyContract
 24th https://www.myetherwallet.com/#contracts
 

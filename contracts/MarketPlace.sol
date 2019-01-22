@@ -1,20 +1,6 @@
 /*
 Questions:
 Implement Eth/USD price
-
-How do you read a mapping, an item within a struct within a mapping
-How do you use event emissions
-
-Can I move the test functions out of this contract? How?
-Test failling if I try read certain information.
-
-why is owner private in ownable. I changed it to internal because I need it in this contract.
-I used ownable and now the js cannot read who owns the contract. How do I fix this?
-
-Why can't I withdraw contract balance to owner (circuit breaker)
-Why do I sometimes have an issue migrating and sometimes not? I have to enable optimizer
-How do you actually make the payment? My function isn't working
-I created a new VM and it doesnt work there, but here it does. Why?
 */
 
 pragma solidity 0.5.0;
@@ -67,7 +53,7 @@ contract MarketPlace is Ownable {
     event itemForSaleDeleted(uint _storeID, uint _skuCode, uint[] _skusInStore);
     event salesWithdrawn(uint _storeID, uint _payment, uint _storeSalesBalance);
     event refund(uint _refund);
-    event itemBought(uint _skuCode, uint _quantity, uint _storeID, uint _price);
+    event itemBought(string _name, uint _skuCode, uint _quantity, uint _storeID, uint _price);
 
 
 
@@ -106,12 +92,12 @@ contract MarketPlace is Ownable {
     }
 
     modifier checkInt(uint _valueToCheck, uint _checkAgainst) {
-        require(_valueToCheck <= _checkAgainst);
+        require(_valueToCheck <= _checkAgainst, "You have entered a value that does not exist");
         _;
     }
 
     modifier stopInEmergency {
-        require(!stopped);
+        require(!stopped, "The marketplace is currently locked by the contract owner due to security reasons");
         _;
     }
 
@@ -128,8 +114,8 @@ contract MarketPlace is Ownable {
         public 
         onlyOwner() 
     {
-        adminsDB[_admin] = true;
-        emit adminAdded(_admin);
+            adminsDB[_admin] = true;
+            emit adminAdded(_admin);
     }
 
     function deleteAdmin(address _admin) 
@@ -144,7 +130,7 @@ contract MarketPlace is Ownable {
         public
         onlyOwner()
     {
-        stopped = true;
+            stopped = true;
     }
 
     function withdrawAllFunds()
@@ -152,7 +138,7 @@ contract MarketPlace is Ownable {
         onlyOwner()
         onlyInEmergency() 
     {
-        _owner.transfer(address(this).balance);
+            _owner.transfer(address(this).balance);
     }
 
 
@@ -241,17 +227,16 @@ contract MarketPlace is Ownable {
             emit itemForSaleDeleted(_storeID, _skuCode, storeFront[_storeID].skusInStore);
     }
 
-    function withdrawSales(uint _storeID) 
+    function withdrawSales(uint _withdrawAmount, uint _storeID) 
         public 
         checkStoreOwner(storeOwnersDB[msg.sender].exists)
         checkOwnerOfStore(msg.sender, _storeID)
         stopInEmergency()
     {
             address payable storeOwnerAddress = storeFront[_storeID].storeOwner;
-            uint payment = storeFront[_storeID].pendingWithdrawal;
-            storeFront[_storeID].pendingWithdrawal = 0; //Preventing reentrancy
-            storeOwnerAddress.transfer(payment);
-            emit salesWithdrawn(_storeID, payment, storeFront[_storeID].pendingWithdrawal);
+            storeFront[_storeID].pendingWithdrawal = SafeMath.sub(storeFront[_storeID].pendingWithdrawal, _withdrawAmount); //Preventing reentrancy
+            storeOwnerAddress.transfer(_withdrawAmount);
+            emit salesWithdrawn(_storeID, _withdrawAmount, storeFront[_storeID].pendingWithdrawal);
     }
 
 
@@ -268,7 +253,7 @@ contract MarketPlace is Ownable {
     {
             storeFront[_storeID].sku[_skuCode].quantity -= _quantity;
             storeFront[_storeID].pendingWithdrawal += (storeFront[_storeID].sku[_skuCode].price*_quantity);
-            emit itemBought(_skuCode, _quantity, _storeID, storeFront[_storeID].sku[_skuCode].price);
+            emit itemBought(storeFront[_storeID].sku[_skuCode].name, _skuCode, _quantity, _storeID, storeFront[_storeID].sku[_skuCode].price);
     }
 
 
@@ -287,35 +272,11 @@ contract MarketPlace is Ownable {
         view
         returns (string memory, uint, uint)
     {
-        string memory itemName = storeFront[_storeID].sku[_sku].name;
-        uint itemQuantity = storeFront[_storeID].sku[_sku].quantity;
-        uint itemPrice = storeFront[_storeID].sku[_sku].price;
-        return (itemName, itemQuantity, itemPrice);
+            string memory itemName = storeFront[_storeID].sku[_sku].name;
+            uint itemQuantity = storeFront[_storeID].sku[_sku].quantity;
+            uint itemPrice = storeFront[_storeID].sku[_sku].price;
+            return (itemName, itemQuantity, itemPrice);
     }
-    
-    /*function getItemInShopName(uint _storeID, uint _sku)
-        public
-        view
-        returns (string memory)
-    {
-        return storeFront[_storeID].sku[_sku].name;
-    }
-
-    function getItemInShopQuantity(uint _storeID, uint _sku)
-        public
-        view
-        returns (uint)
-    {
-        return storeFront[_storeID].sku[_sku].quantity;
-    }
-            
-    function getItemInShopPrice(uint _storeID, uint _sku)
-        public
-        view
-        returns (uint)
-    {
-        return storeFront[_storeID].sku[_sku].price;
-    }*/
 
 
 

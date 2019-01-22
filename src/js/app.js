@@ -1,8 +1,28 @@
 var marketplaceInstance = null;
 var selectedShop = null;
 
+async function refreshTables(){
+  $("#ownerTable").remove();
+  $("#ownerTablePos").html("<table id='ownerTable' class='table text-left'><tbody><tr></tr></tbody></table>")
+  let noOfRows = await marketplaceInstance.storeCount();
+  for (let k = 1; k <= noOfRows; k++) {
+    let storeFront = await marketplaceInstance.storeFront.call(k);
+    if (App.account == storeFront[1]){
+      $('#ownerTable> tbody:last-child').append('<tr><th>' + storeFront[0] + '</th><th>Store ID ' + k + '</th></tr>');
+      $('#ownerTable> tbody:last-child').append('<tr><th>Item Name</th><th>Item SKU</th></th><th>Quantity available</th></th><th>Price per unit</th></tr>');
+      let noOfInner = await marketplaceInstance.getLatestSKU(k);
+      for (var i = 1; i <= noOfInner.c[0]; i++) {
+        let item = await marketplaceInstance.getItemInShop(k, i);
+        if (item[0] !== "") {
+          $('#ownerTable > tbody:last-child').append('<tr><td>' + item[0] + '</td><td>' + k + '</td><td>' + item[1].toString() + '</td><td>' + item[2].toString() + '</td></tr>');
+        }  
+      }
+      $('#ownerTable> tbody:last-child').append('<hr/>');
+    }
+  }
+}
+
 $("#login").click(async function(){
-  console.log("Attempted to log in");
   if (App.account == await marketplaceInstance.owner()) {
       alert("Logging in as Contract Owner");
       $("#contractOwnerView").show();
@@ -20,6 +40,7 @@ $("#login").click(async function(){
       $("#storeOwnerView").show();
       $("#welcomeView").hide();
       $("#logout").show();
+      refreshTables();
   }
   else {
       alert("Logging in as shopper");
@@ -27,27 +48,15 @@ $("#login").click(async function(){
       $("#welcomeView").hide();
       $("#logout").show();
 
-
-
-
-
       //This only works because there is no deleteStore function. If this had to be taken into account, a more robust indexing method would be required to
       //map the storeIDs to the store names for display purposes. For eg, deleting store with ID 5 in a list of 7 stores would leave a gap, so a loop from
       //1 to 7 would display a empty line item. This can very easily be dealt with error handling.
-      var noOfRows = await marketplaceInstance.storeCount();
-      console.log("Number of rows [%o]",noOfRows);
-      
+      let noOfRows = await marketplaceInstance.storeCount();
       $('#shopTable > tbody:last-child').append('<tr><th>Shop Name</th><th>Shop ID</th></tr>');
       for (let k = 1; k <= noOfRows; k++) {
         let storeFront = await marketplaceInstance.storeFront.call(k);
-        //console.log("Store name is [%o][%o]",storeFront,k);
-        $('#shopTable > tbody:last-child').append('<tr><td>',storeFront[0],'</td><td>',k,'</td></tr>');
+        $('#shopTable > tbody:last-child').append('<tr><td>' + storeFront[0] + '</td><td>' + k + '</td></tr>');
       }
-
-
-
-
-
 
       $("#selectedShopButton").click(async function(){
         selectedShop = $("#selectedShop").val();
@@ -55,18 +64,15 @@ $("#login").click(async function(){
         $("#shopperSelectShop").hide();
         $("#shopperShop").show();
 
+        let storeFront = await marketplaceInstance.storeFront.call(selectedShop);
+        $("#shopperHeading").html(storeFront[0]);
+
         $('#forSaleTable > tbody:last-child').append('<tr><th>Item Name</th><th>Item SKU</th></th><th>Quantity available</th></th><th>Price per unit</th></tr>');
         let noOfRows = await marketplaceInstance.getLatestSKU(selectedShop);
-        console.log("no of rows: ", noOfRows);
-        //console.log("Items table [%o]");
-
-        //debugger;
         for (var k = 1; k <= noOfRows; k++) {
           let item = await marketplaceInstance.getItemInShop(selectedShop, k);
           if (item[0] !== "") {
-            console.log("Item details %o", item);
-            $('#forSaleTable > tbody:last-child').append('<tr><td>',item[0],'</td><td>',k,'</td><td>',item[1].toString(),'</td><td>',item[2].toString(),'</td></tr>');
-            //$("#forSaleDiv").html(item[0], "    ", k, "    ", item[1].toString(), "    ", item[2].string())
+            $('#forSaleTable > tbody:last-child').append('<tr><td>' + item[0] + '</td><td>' + k + '</td><td>' + item[1].toString() + '</td><td>' + item[2].toString() + '</td></tr>');
           }  
         }
       })
@@ -79,13 +85,17 @@ $("#logout").click(function(){
   alert("Logging out");
 })
 
-function redrawTable (_administrator) {
-  
+$("#refreshPage").click(function(){
+  refreshTables();
+})
+
+function refreshStoreOwnerView() {
+  window.location.reload();
+  $("#welcomeView").hide();
+  $("#storeOwnerView").show();
 }
 
-
 $("#addAdminButton").click(async function() { 
-  console.log("Attempted to add admin");
   var adminAddressToAdd = $("#addAdminInput").val();
   var result = await marketplaceInstance.addAdmin(adminAddressToAdd);
   alert(result.logs[0].args._admin + " added as an administrator");
@@ -124,7 +134,6 @@ $("#createStoreButton").click(async function() {
   console.log("Attempted to create store");
   var storeToCreate = $("#createStoreInput").val();
   const result = await marketplaceInstance.createStoreFront(storeToCreate);
-  //console.log(result.logs[0].args);
   alert(result.logs[0].args._storeName + " created with store ID of " + result.logs[0].args._storeID);
 })
 
@@ -135,7 +144,6 @@ $("#newItemButton").click(async function() {
   var newItemPrice = $("#newItemPrice").val();
   var newItemShopID = $("#newItemShopID").val();
   const result = await marketplaceInstance.addItem(newItemName, newItemQuantity, newItemPrice, newItemShopID);
-  console.log(result.logs);
   alert(result.logs[0].args._nameOfItem + "\nassigned sku code " + result.logs[0].args._sku.toString() + "\nadded to store ID " + result.logs[0].args._storeID.toString()
      + "\nquantity " + result.logs[0].args._quantity.toString() + "\nwith price " + result.logs[0].args._price.toString());
 })
@@ -145,22 +153,34 @@ $("#changePriceButton").click(async function() {
   var changePriceInput = $("#changePriceNewPrice").val();
   var changePriceSKU = $("#changePriceSKU").val();
   var changePriceShopID = $("#changePriceShopID").val();
-  const result = await marketplaceInstance.changePrice(changePriceInput, changePriceSKU, changePriceShopID, newItemShopID);
-  console.log(result.logs);
+  const result = await marketplaceInstance.changePrice(changePriceSKU, changePriceShopID, changePriceInput);
+  alert("Item with sku code " + result.logs[0].args._sku.toString() + "\nin store ID " + result.logs[0].args._storeID.toString()
+     + "\nPrice changed to " + result.logs[0].args._newPrice.toString());
 })
 
 $("#deleteItemButton").click(async function() {
+  console.log("Attempted to delete item");
   var skuToDelete = $("#skuToDelete").val();
   var skuShopIDToDelete = $("#skuShopIDToDelete").val();
-  const result = await marketplaceInstance.deleteItem(skuToDelete, skuShopIDToDelete);
-  console.log(result.logs);
+  const result = await marketplaceInstance.deleteItem(skuShopIDToDelete, skuToDelete);
+  alert("Item with sku code " + result.logs[0].args._skuCode.toString() + "\nin store ID " + result.logs[0].args._storeID.toString()
+     + "\ndeleted");
 })
 
 $("#withdrawButton").click(async function() {
   console.log("Attempted to withdraw sales");
   var shopIDtoWithdrawFrom = $("#shopIDtoWithdrawFrom").val();
-  const result = await marketplaceInstance.withdrawSales(shopIDtoWithdrawFrom);
-  console.log(result.logs);
+  const shopBalance = await marketplaceInstance.fetchStoreBalance.call(shopIDtoWithdrawFrom);
+  var withdrawAmount = prompt("Store balance is " + shopBalance.toString() + ". How much would you like to withdraw?");
+  if (withdrawAmount > shopBalance || withdrawAmount < 0) {
+    alert("You can only withdraw up to a maximum of the shop balance. Please input a lower value")
+  }
+  else {
+    const result = await marketplaceInstance.withdrawSales(withdrawAmount, shopIDtoWithdrawFrom);
+    const remainingBalance = shopBalance - withdrawAmount;
+    alert(withdrawAmount + " withdrawn. \nRemaining balance in store " + remainingBalance);
+  }
+
 })
 
 $("#buyButton").click(async function(){
@@ -170,7 +190,11 @@ $("#buyButton").click(async function(){
   var payment = parseInt($("#payment").val());
   var buyStoreID = selectedShop;
   const result = await marketplaceInstance.buyItem(buyQuantity, buySKU, buyStoreID, { gas:100000, value: payment});
-  console.log(result.logs);
+  var pricePerUnit = result.logs[0].args._price.toString();
+  var totalPrice = pricePerUnit * buyQuantity;
+  var returned = payment - totalPrice;
+  alert("Purchase receipt\n" + result.logs[0].args._name + "\nsku " + result.logs[0].args._skuCode.toString() + "\nfrom store ID " + result.logs[0].args._storeID.toString()
+    + "\n\nTransaction details" + "\nTotal: " + totalPrice.toString() + "\nTendered: " + payment.toString() + "\nReturned: " + returned.toString());
 })
 
 
