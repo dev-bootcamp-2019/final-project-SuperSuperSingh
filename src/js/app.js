@@ -76,8 +76,6 @@ $("#login").click(async function(){
           }  
         }
       })
-      
-    
   }
 })
 
@@ -89,11 +87,23 @@ $("#refreshPage").click(function(){
   refreshTables();
 })
 
-function refreshStoreOwnerView() {
-  window.location.reload();
-  $("#welcomeView").hide();
-  $("#storeOwnerView").show();
-}
+$("#activateEmergency").click(function(){
+  if(confirm("Are you 100% sure that you need to freeze the contract?")) {
+    marketplaceInstance.activateEmergencyStop();
+  }
+})
+
+("#deactivateEmergency").click(function(){
+  if(confirm("Are you 100% sure that you need to unfreeze the contract?")) {
+    marketplaceInstance.deActivateEmergencyStop();
+  }
+})
+
+$("#withdrawContract").click(function(){
+  if(confirm("Are you 100% sure that you need to withdraw ALL contract funds?")) {
+    marketplaceInstance.withdrawAllFunds();
+  }
+})
 
 $("#addAdminButton").click(async function() { 
   var adminAddressToAdd = $("#addAdminInput").val();

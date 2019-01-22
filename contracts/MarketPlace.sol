@@ -97,7 +97,7 @@ contract MarketPlace is Ownable {
     }
 
     modifier stopInEmergency {
-        require(!stopped, "The marketplace is currently locked by the contract owner due to security reasons");
+        require(!stopped, "To protect your funds, the marketplace has been placed on emergency shutdown by the contract owner due to a potential threat. Please wait for further notice");
         _;
     }
 
@@ -131,6 +131,13 @@ contract MarketPlace is Ownable {
         onlyOwner()
     {
             stopped = true;
+    }
+
+    function deActivateEmergencyStop()
+        public
+        onlyOwner()
+    {
+            stopped = false;
     }
 
     function withdrawAllFunds()
