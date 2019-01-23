@@ -4,6 +4,8 @@
 
 Balance states are changed *prior* to the movement of funds. The store owner can choose the amount to withdraw, but is prevented from withdrawing more than exists in his/her balance. In addition, store balances are stored as independent variables of the contract balance, limiting the potential for losses.
 
+Modifiers are used to prevent access to functionality not belonging to the owner of the funds, by means of a mapping structure between shops and shop owners.
+
 
 ## 2. Integer overflow/underflow
 
@@ -12,7 +14,7 @@ The SafeMath library by [OpenZeppelin](https://openzeppelin.org/api/docs/math_Sa
 
 ## 3. Transaction protocols
 
-Used msg.sender as opposed to tx.origin
+Used msg.sender as opposed to tx.origin for value transfers.
 
 
 ## 4. Gas limits
