@@ -137,6 +137,17 @@ Once the GUI is loaded in your browser, open the Metamask browser extension, and
 
 For testnet or mainnet deployments, you will have to load your Rinkeby or private Metamask account respevtively in a similar fashion to above, except using the relevant network selection. The details will not be discussed here, but requires real Ether or Ether from a testnet faucet.
 
+Sample tests have been developed and are accessible in the MarketPlace.js file under the test folder. To run the tests, open a new terminal, navigate to the root folder of the app and enter
+```
+$ truffle develop
+```
+then
+```
+$ compile
+$ migrate
+$test
+```
+
 ## Enhancemets
 
 - Implement a more robust administrator management system, including the abilities to freeze particular stores and approve stores before they are activated
