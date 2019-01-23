@@ -17,25 +17,25 @@ This dapp has been submitted as a final project for the Consensys Academy Develo
 
 There are 4 sets of users - the contract owner, the administrator, the shopfront owner and the shopper. Upon login, the dapp recognises the Ethereum address of the user and grants them viewing/access rights accordingly.
 
-### Contract Owner functionality
+**Contract Owner functionality**
 Add marketplace administrator
 Delete marketplace administrator
 Freeze contract functionality (emergency stop)
 Withdraw all contract funds (once emergency stop activated)
 Unfreeze contract functionality
 
-### Administrator functionality
+**Administrator functionality**
 Add shop owner
 Delete shop owner
 
-### Shop owner functionality
+**Shop owner functionality**
 Create new shopfront
 Add new items for sale in a particular shopfront
 Modify the price of an existing item for sale
 Delete an item from a shopfront
 Withdraw sales income from a particular shop
 
-### Shopper functionality
+**Shopper functionality**
 View shopfronts available on the marketplace
 Enter a shopfront and view items available for sale
 Purchase items from a particular shopfront
