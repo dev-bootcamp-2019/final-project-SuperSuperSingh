@@ -30,10 +30,10 @@ As with Ownable, the SafeMath contract - again, audited and approved for use by 
 
 ## Behavioural guards
 
-*Intending to implement a library to prevent empty input
+*Intending to implement a library to prevent empty input*
 
 
-## Gas optomisation
+## Gas optimisation
 
 No loops have been used in the construction of this contract, which *could* (they don't have to be) otherwise be computationally expensive. Any looping functionality is handled outside of the contract.
 
