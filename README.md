@@ -129,12 +129,12 @@ Implement an oracle to convert the Eth price to a $US price
 [ ] Use a library or extend a contract
 [ ] Via EthPM or write your own
 ### Stretch Requirements
--[ ] Deploy contract on testnet
--[ ] Use Ethereum Name Service
--[ ] Add functionality that allows store owners to create an auction for an individual item in their store
--[ ] Give store owners the option to accept any ERC-20 token
--[ ] Implement an upgradable design pattern
--[ ] Write a smart contract in LLL or Vyper
--[ ] Use uPort
--[ ] Use IPFS
--[ ] Use Oracle
+ [ ] Deploy contract on testnet
+ [x] Use Ethereum Name Service
+ [ ] Add functionality that allows store owners to create an auction for an individual item in their store
+ [ ] Give store owners the option to accept any ERC-20 token
+ [ ] Implement an upgradable design pattern
+ [ ] Write a smart contract in LLL or Vyper
+ [ ] Use uPort
+ [ ] Use IPFS
+ [ ] Use Oracle
