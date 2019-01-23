@@ -49,7 +49,7 @@ Contained within the storefront mapping is the store name, store owners address,
 
 The above decisions provide a very methodical approach to tracking of the marketplace - 
 
-Is the user a store owner (bool)? Yes ->  Display all store details in which the user is recorded as the owner (mapping -> struct) -> Display the items within that store
+Is the user a store owner (bool)? Yes ->  Display all store details in which the user is recorded as the owner, mapping(int -> struct) -> Display all the items within that store, mapping(int -> struct) once again.
 
 ## Events and logs
 
