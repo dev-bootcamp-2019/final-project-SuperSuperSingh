@@ -145,7 +145,7 @@ then
 ```
 $ compile
 $ migrate
-$test
+$ test
 ```
 
 ## Enhancemets
