@@ -7,6 +7,7 @@
     
     <title>Decentralised marketplace</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
   </head>
 
 
@@ -19,88 +20,113 @@
       <h3 id="numberOfStores"></h3>
       <hr/>
 
-      <button id="login">Login</button>
+      <button id="login" class="btn">Login</button>
       <hr/>
     </section>
 
 
     <!--Contract Owner-->
-    <section id="contractOwnerView" style="margin-top:20%">
+    <section id="contractOwnerView" style="margin-top:10%">
       <h1>Contract Owner dashboard</h1>
       <hr/>
+      <div class="row" style="margin: 20px 0">
+        <div class="col-sm-6 col-sm-offset-3">
+          <button id="activateEmergency" class="btn btn-danger">Activate Emergency</button>
+          <button id="deactivateEmergency" class="btn btn-danger">Deactivate emergency</button>
+          <button id="withdrawContract" class="btn btn-danger">Withdraw contract balance</button>
+        </div>
+      </div>
 
-      <button id="activateEmergency">Activate Emergency</button>
-      <button id="deactivateEmergency">Deactivate emergency</button>
-      <button id="withdrawContract">Withdraw contract balance</button>
-
-      <input id="addAdminInput" placeholder="New administrators address"/>
-      <button id="addAdminButton">Add administrator</button>
+      <div class="row" style="margin: 20px 0">
+        <div class="col-sm-6 col-sm-offset-3">
+          <input id="addAdminInput" class="form-control" placeholder="New administrators address"/>
+          <button id="addAdminButton" class="btn">Add administrator</button>
+        </div>
+      </div>
       <hr/>
 
-      <input id="deleteAdminInput" placeholder="Address of administrator to delete"/>
-      <button id="deleteAdminButton">Delete administrator</button>
-      <hr/>
-      
-      <table id="administratorsTable" class="table text-left">
-        <tbody>
-          <tr>
-          </tr>
-        </tbody>
-      </table>
-
-      <p>Total revenue of marketplace</p>
+      <div class="row" style="margin: 20px 0">
+        <div class="col-sm-6 col-sm-offset-3">
+          <input id="deleteAdminInput" placeholder="Address of administrator to delete" class="form-control"/>
+          <button id="deleteAdminButton" class="btn">Delete administrator</button>
+        </div>
+      </div>
       <hr/>
     </section>
       
 
 
     <!--Administrator-->
-    <section id="administratorView" style="margin-top:20%">
+    <section id="administratorView" style="margin-top:10%">
       <h1>Administrator dashboard</h1>
       <hr/>
-
-      <input id="addStoreOwnerInput" placeholder="New store owner's address"/>
-      <button id="addStoreOwnerButton">Add store owner</button>
+      <div class="row" style="margin: 20px 0">
+        <div class="col-sm-6 col-sm-offset-3">
+          <input id="addStoreOwnerInput" placeholder="New store owner's address" class="form-control"/>
+          <button id="addStoreOwnerButton" class="btn">Add store owner</button>
+        </div>
+      </div>
       <hr/>
-
-      <input id="deleteStoreOwnerInput" placeholder="Address of store owner to delete"/>
-      <button id="deleteStoreOwnerButton">Delete store owner</button>
+      <div class="row" style="margin: 20px 0">
+        <div class="col-sm-6 col-sm-offset-3">
+          <input id="deleteStoreOwnerInput" placeholder="Address of store owner to delete" class="form-control"/>
+          <button id="deleteStoreOwnerButton" class="btn">Delete store owner</button>
+        </div>
+      </div>
       <hr/> 
     </section>
 
 
 
     <!--Store Owner-->
-    <section id="storeOwnerView" style="margin-top:20%">
+    <section id="storeOwnerView" style="margin-top:10%">
       <h1>Store owner dashboard</h1>
-      <input id="createStoreInput" placeholder="New store name"/>
-      <button id="createStoreButton">Create Store</button>
+      <div class="row" style="margin: 20px 0">
+        <div class="col-sm-6 col-sm-offset-3">
+          <input id="createStoreInput" placeholder="New store name" class="form-control"/>
+          <button id="createStoreButton" class="btn">Create Store</button>
+        </div>
+      </div>
       <hr/>
 
-      <input id="newItemName" placeholder="Add item name"/>
-      <input id="newItemQuantity" placeholder="Item quantity"/>
-      <input id="newItemPrice" placeholder="Item price"/>
-      <input id="newItemShopID" placeholder="What is the shop ID to add the item to"/>
-      <button id="newItemButton">Add new item</button>
+      <div class="row" style="margin: 20px 0">
+        <div class="col-sm-4">
+          <input id="newItemName" placeholder="Add item name" class="form-control"/>
+          <input id="newItemQuantity" placeholder="Item quantity" class="form-control"/>
+          <input id="newItemPrice" placeholder="Item price" class="form-control"/>
+          <input id="newItemShopID" placeholder="What is the shop ID to add the item to" class="form-control"/>
+          <button id="newItemButton" class="btn">Add new item</button>
+        </div>
+
+        <div class="col-sm-4">
+          <input id="changePriceNewPrice" placeholder="New item price" class="form-control"/>
+          <input id="changePriceSKU" placeholder="SKU" class="form-control"/>
+          <input id="changePriceShopID" placeholder="Shop ID" class="form-control"/>
+          <button id="changePriceButton" class="btn">Update item price</button>
+        </div>
+
+        <div class="col-sm-4">
+          <input id="skuToDelete" placeholder="SKU" class="form-control"/>
+          <input id="skuShopIDToDelete" placeholder="Shop ID" class="form-control"/>
+          <button id="deleteItemButton" class="btn">Delete item</button>
+        </div>
+      </div>
       <hr/>
 
-      <input id="changePriceNewPrice" placeholder="New item price"/>
-      <input id="changePriceSKU" placeholder="SKU"/>
-      <input id="changePriceShopID" placeholder="Shop ID"/>
-      <button id="changePriceButton">Update item price</button>
-      <hr/>
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <input id="shopIDtoWithdrawFrom" placeholder="Shop ID" class="form-control"/>
+          <button id="withdrawButton" class="btn">Withdraw sales</button>
+          <hr/>
+        </div>
+      </div>
 
-      <input id="skuToDelete" placeholder="SKU"/>
-      <input id="skuShopIDToDelete" placeholder="Shop ID"/>
-      <button id="deleteItemButton">Delete item</button>
-      <hr/>
-
-      <input id="shopIDtoWithdrawFrom" placeholder="Shop ID"/>
-      <button id="withdrawButton">Withdraw sales</button>
-      <hr/>
-
-      <button id="refreshPage">Refresh tables</button>
-      <hr/>
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <button id="refreshPage" class="btn">Refresh tables</button>
+          <hr/>
+        </div>  
+      </div>  
 
       <h1>Your shops</h1>
       <div id="ownerTablePos">
@@ -116,40 +142,59 @@
 
 
     <!--Shopper-->
-    <section id="shopperSelectShop" style="margin-top:20%">
+    <section id="shopperSelectShop" style="margin-top:10%">
       <h1>Select a shop to browse</h1>
-      <table id="shopTable" class="table text-left">
-        <tbody>
-          <tr>
-          </tr>
-        </tbody>
-      </table>
-      <input id="selectedShop" placeholder="Enter shop ID to browse"/>
-      <button id="selectedShopButton">Go to shop</button>
+      <div class="row">
+        <div class="col-sm-8 col-sm-offset-2">
+          <table id="shopTable" class="table text-left">
+            <tbody>
+              <tr>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <input id="selectedShop" placeholder="Enter shop ID to browse" class="form-control"/>
+          <button id="selectedShopButton" class="btn">Go to shop</button>
+        </div>
+      </div>
     </section>
     
-    <section id="shopperShop" style="margin-top:20%">
+    <section id="shopperShop" style="margin-top:10%">
       <h1 id="shopperHeading"></h1>
-      <table id="forSaleTable" class="table text-left">
-        <tbody>
-          <tr>
-          </tr>
-        </tbody>
-      </table>
+      <div class="row">
+        <table id="forSaleTable" class="table text-left">
+          <tbody>
+            <tr>
+            </tr>
+          </tbody>
+        </table>
+      </div>  
 
-      <!--div id="forSaleDiv">
-
-      </div-->
-
-      <input id="buySKU" placeholder="Item code to purchase"/>
-      <input id="buyQuantity" placeholder="Quantity to buy"/>
-      <input id="payment" placeholder="Payment value in wei"/>
-      <button id="buyButton">Purchase</button>
+      <div class="row">
+        <div class="col-sm-4">  
+          <input id="buySKU" placeholder="Item code to purchase" class="form-control"/>
+        </div>
+        <div class="col-sm-4">
+          <input id="buyQuantity" placeholder="Quantity to buy" class="form-control"/>
+        </div>
+        <div class="col-sm-4">
+          <input id="payment" placeholder="Payment value in wei"class="form-control"/>
+        </div>
+      </div>
+      <div class="col-sm-4 col-sm-offset-4">  
+        <button id="buyButton" class="btn">Purchase</button>
+      </div>
     </section>
 
 
-
-    <button id="logout" onClick="window.location.reload()">Log out</button>
+    <div class="row">
+      <div class="col-sm-4 col-sm-offset-4">
+        <button id="logout" onClick="window.location.reload()" class="btn">Log out</button>
+      </div>
+    </div>
 
 
     

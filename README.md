@@ -85,9 +85,9 @@ Host OS - Windows 10 Home edition
 
 [Truffle](https://truffleframework.com/truffle)
 
-Lite server
-
 [Metamask](https://metamask.io/)
+
+Lite server
 
 
 In command line, run the following commands as root/administrator. Lite server is installed alongside nodejs.

@@ -10,7 +10,7 @@ library SafeMath {
     * @dev Subtracts two unsigned integers, reverts on overflow (i.e. if subtrahend is greater than minuend).
     */
     function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        require(b <= a, "No items left in array - no items being sold in store");
+        require(b <= a, "Error. You are trying to withdraw more funds than are available in the account.");
         uint256 c = a - b;
 
         return c;

@@ -14,7 +14,7 @@ async function refreshTables(){
       for (var i = 1; i <= noOfInner.c[0]; i++) {
         let item = await marketplaceInstance.getItemInShop(k, i);
         if (item[0] !== "") {
-          $('#ownerTable > tbody:last-child').append('<tr><td>' + item[0] + '</td><td>' + k + '</td><td>' + item[1].toString() + '</td><td>' + item[2].toString() + '</td></tr>');
+          $('#ownerTable > tbody:last-child').append('<tr><td>' + item[0] + '</td><td>' + i + '</td><td>' + item[1].toString() + '</td><td>' + item[2].toString() + '</td></tr>');
         }  
       }
       $('#ownerTable> tbody:last-child').append('<hr/>');
@@ -87,21 +87,24 @@ $("#refreshPage").click(function(){
   refreshTables();
 })
 
-$("#activateEmergency").click(function(){
+$("#activateEmergency").click( async function(){
   if(confirm("Are you 100% sure that you need to freeze the contract?")) {
-    marketplaceInstance.activateEmergencyStop();
+    await marketplaceInstance.activateEmergencyStop();
+    alert("Contract frozen. All functionality disabled until freeze is removed.")
   }
 })
 
-("#deactivateEmergency").click(function(){
+$("#deactivateEmergency").click(async function(){
   if(confirm("Are you 100% sure that you need to unfreeze the contract?")) {
-    marketplaceInstance.deActivateEmergencyStop();
+    await marketplaceInstance.deActivateEmergencyStop();
+    alert("Contract functionality restored.")
   }
 })
 
-$("#withdrawContract").click(function(){
+$("#withdrawContract").click(async function(){
   if(confirm("Are you 100% sure that you need to withdraw ALL contract funds?")) {
-    marketplaceInstance.withdrawAllFunds();
+    await marketplaceInstance.withdrawAllFunds();
+    alert("Contract funds withdrawn.")
   }
 })
 

@@ -85,6 +85,12 @@ contract MarketPlace is Ownable {
         emit refund(amountToRefund);
     }
 
+    modifier checkStoreBalance(uint _storeID, uint _withdrawAmount) {
+        require(storeFront[_storeID].pendingWithdrawal >= 0, "The store balance is 0. No funds to withdraw.");
+        require(_withdrawAmount <= storeFront[_storeID].pendingWithdrawal, "You are trying to withdraw more than the available balance in the account");
+        _;
+    }
+
     modifier checkInt(uint _valueToCheck, uint _checkAgainst) {
         require(_valueToCheck <= _checkAgainst, "You have entered a value that does not exist");
         _;
@@ -105,7 +111,8 @@ contract MarketPlace is Ownable {
     //Contract owner functions
 
     function addAdmin(address _admin) 
-        public 
+        public
+        stopInEmergency()
         onlyOwner() 
     {
             adminsDB[_admin] = true;
@@ -113,7 +120,8 @@ contract MarketPlace is Ownable {
     }
 
     function deleteAdmin(address _admin) 
-        public 
+        public
+        stopInEmergency()
         onlyOwner() 
     {
             delete adminsDB[_admin];
@@ -146,7 +154,8 @@ contract MarketPlace is Ownable {
     //Admin functions
 
     function addStoreOwner(address _newStoreOwner) 
-        public 
+        public
+        stopInEmergency()
         checkAdmin(adminsDB[msg.sender])
     {
             storeOwnersDB[_newStoreOwner] = true;
@@ -154,7 +163,8 @@ contract MarketPlace is Ownable {
     }
 
     function deleteStoreOwner(address _deleteStoreOwner) 
-        public 
+        public
+        stopInEmergency()
         checkAdmin(adminsDB[msg.sender]) 
     {
             delete storeOwnersDB[_deleteStoreOwner];
@@ -166,7 +176,8 @@ contract MarketPlace is Ownable {
     //Store owner functions
 
     function createStoreFront(string memory _storeName) 
-        public 
+        public
+        stopInEmergency()
         checkStoreOwner(storeOwnersDB[msg.sender]) 
     {
             storeCount = SafeMath.add(storeCount, 1);
@@ -176,10 +187,10 @@ contract MarketPlace is Ownable {
     }
 
     function addItem(string memory _nameOfItem, uint _quantity, uint _price, uint _storeID) 
-        public 
+        public
+        stopInEmergency()
         checkStoreOwner(storeOwnersDB[msg.sender])
         checkOwnerOfStore(msg.sender, _storeID)
-        stopInEmergency()
     {
             skuCount = SafeMath.add(skuCount, 1);
             storeFront[_storeID].sku[skuCount].name = _nameOfItem;
@@ -191,10 +202,10 @@ contract MarketPlace is Ownable {
     }
 
     function changePrice(uint _skuCode, uint _storeID, uint _newPrice) 
-        public 
+        public
+        stopInEmergency()
         checkStoreOwner(storeOwnersDB[msg.sender])
         checkOwnerOfStore(msg.sender, _storeID)
-        stopInEmergency()
         checkInt(_skuCode, skuCount)
     {
             storeFront[_storeID].sku[_skuCode].price = _newPrice;
@@ -202,7 +213,8 @@ contract MarketPlace is Ownable {
     }
 
     function deleteItem(uint _storeID, uint _skuCode)
-        public 
+        public
+        stopInEmergency()
         checkStoreOwner(storeOwnersDB[msg.sender])
         checkOwnerOfStore(msg.sender, _storeID)
         checkInt(_skuCode, skuCount)
@@ -212,10 +224,11 @@ contract MarketPlace is Ownable {
     }
 
     function withdrawSales(uint _withdrawAmount, uint _storeID) 
-        public 
+        public
+        stopInEmergency()
         checkStoreOwner(storeOwnersDB[msg.sender])
         checkOwnerOfStore(msg.sender, _storeID)
-        stopInEmergency()
+        checkStoreBalance(_storeID, _withdrawAmount)
     {
             address payable storeOwnerAddress = storeFront[_storeID].storeOwner;
             storeFront[_storeID].pendingWithdrawal = SafeMath.sub(storeFront[_storeID].pendingWithdrawal, _withdrawAmount); //Preventing reentrancy
@@ -229,10 +242,10 @@ contract MarketPlace is Ownable {
     function buyItem(uint _quantity, uint _skuCode, uint _storeID) 
         public
         payable
+        stopInEmergency()
         checkQuantity(_quantity, _storeID, _skuCode)
         paidEnough(_quantity, storeFront[_storeID].sku[_skuCode].price)
         checkValue(_quantity, storeFront[_storeID].sku[_skuCode].price)
-        stopInEmergency()
 
     {
             storeFront[_storeID].sku[_skuCode].quantity -= _quantity;
