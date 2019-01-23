@@ -5,6 +5,7 @@ Done 21st Libraries - Ownable and overflows
 23rd Readmes
 23rd Design patterns
 Avoiding common attacks module 9 lesson 3
+Add pictures
 24th Comments
 21st Updates reflected in UI - Shop Owner shop see a table with shop and another table with items in shop, error checking, message boxes
 Done 22nd Design patterns - implement a circuit breaker
