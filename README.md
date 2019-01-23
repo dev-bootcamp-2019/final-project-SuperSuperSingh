@@ -1,7 +1,12 @@
 # Decentralised online marketplace
+
 Consensys Academy Developers Course
+
 Final Project - Kreaan Singh
+
 Jan 2019
+
+
 
 ## Introduction
 
@@ -13,6 +18,7 @@ The marketplace can be deployed to a local development blockchain such as that c
 
 This dapp has been submitted as a final project for the Consensys Academy Developers Course, October 2018 - January 2019.
 
+
 ## App functionality
 
 There are 4 sets of users - the contract owner, the administrator, the shopfront owner and the shopper. Upon login, the dapp recognises the Ethereum address of the user and grants them viewing/access rights accordingly.
@@ -20,43 +26,43 @@ There are 4 sets of users - the contract owner, the administrator, the shopfront
 
 **Contract Owner functionality**
 
-Add marketplace administrator
+- Add marketplace administrator
 
-Delete marketplace administrator
+- Delete marketplace administrator
 
-Freeze contract functionality (emergency stop)
+- Freeze contract functionality (emergency stop)
 
-Withdraw all contract funds (once emergency stop activated)
+- Withdraw all contract funds (once emergency stop activated)
 
-Unfreeze contract functionality
+- Unfreeze contract functionality
 
 **Administrator functionality**
 
-Add shop owner
+- Add shop owner
 
-Delete shop owner
+- Delete shop owner
 
 
 **Shop owner functionality**
 
-Create new shopfront
+- Create new shopfront
 
-Add new items for sale in a particular shopfront
+- Add new items for sale in a particular shopfront
 
-Modify the price of an existing item for sale
+- Modify the price of an existing item for sale
 
-Delete an item from a shopfront
+- Delete an item from a shopfront
 
-Withdraw sales income from a particular shop
+- Withdraw sales income from a particular shop
 
 
 **Shopper functionality**
 
-View shopfronts available on the marketplace
+- View shopfronts available on the marketplace
 
-Enter a shopfront and view items available for sale
+- Enter a shopfront and view items available for sale
 
-Purchase items from a particular shopfront
+- Purchase items from a particular shopfront
 
 
 
@@ -123,21 +129,22 @@ npm run dev
 
 This creates a local server in which the GUI can be accessed. The typical address is localhost:3000
 
-*For a localhost blockchain deployment* Once the GUI is loaded in your browser, open the Metamask browser extension, and then select "Import using account seed phrase" at the bottom of the window. A new browser tab should open. Select localhost network from the available networks, and again, "Import using account seed phrase". Navigate back to the terminal in which Ganache-cli was run, and copy the 12-word mnemonic that is displayed. Copy and paste these words into the Metamask wallet seed field. Enter a password and click restore. The local blockchain account that was used to deploy the dapp is now available for use via Metamask.
+*For a localhost blockchain deployment* 
+Once the GUI is loaded in your browser, open the Metamask browser extension, and then select "Import using account seed phrase" at the bottom of the window. A new browser tab should open. Select localhost network from the available networks, and again, "Import using account seed phrase". Navigate back to the terminal in which Ganache-cli was run, and copy the 12-word mnemonic that is displayed. Copy and paste these words into the Metamask wallet seed field. Enter a password and click restore. The local blockchain account that was used to deploy the dapp is now available for use via Metamask.
 
 For testnet or mainnet deployment, you will have to load your Rinkeby or private Metamask account respevtively in a similar fashion to above, except using the relevant network selection.
 
 ## Enhancemets
 
-Implement a more robust administrator management system, including the abilities to freeze particular stores and approve stores before they are activated
+- Implement a more robust administrator management system, including the abilities to freeze particular stores and approve stores before they are activated
 
-Implement a standalone indexing and storage contract to allow for upgradeability
+- Implement a standalone indexing and storage contract to allow for upgradeability
 
-Include a n-of-m multisig withdrawal system in emergency state
+- Include a n-of-m multisig withdrawal system in emergency state
 
-Include ERC-20 tokens as mediums of payment
+- Include ERC-20 tokens as mediums of payment
 
-Implement an oracle to convert the Eth price to a $US price
+- Implement an oracle to convert the Eth price to a $US price
 
 
 ## Project Requirements
