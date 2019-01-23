@@ -129,11 +129,13 @@ npm run dev
 
 This creates a local server in which the GUI can be accessed. The typical address is localhost:3000
 
-*For a localhost blockchain deployment* 
+*Metamask setup in a localhost blockchain deployment* 
 
 Once the GUI is loaded in your browser, open the Metamask browser extension, and then select "Import using account seed phrase" at the bottom of the window. A new browser tab should open. Select localhost network from the available networks, and again, "Import using account seed phrase". Navigate back to the terminal in which Ganache-cli was run, and copy the 12-word mnemonic that is displayed. Copy and paste these words into the Metamask wallet seed field. Enter a password and click restore. The local blockchain account that was used to deploy the dapp is now available for use via Metamask.
 
-For testnet or mainnet deployment, you will have to load your Rinkeby or private Metamask account respevtively in a similar fashion to above, except using the relevant network selection.
+*Metamask setup in testnet or mainnet* 
+
+For testnet or mainnet deployments, you will have to load your Rinkeby or private Metamask account respevtively in a similar fashion to above, except using the relevant network selection. The details will not be discussed here, but requires real Ether or Ether from a testnet faucet.
 
 ## Enhancemets
 
@@ -143,9 +145,13 @@ For testnet or mainnet deployment, you will have to load your Rinkeby or private
 
 - Include a n-of-m multisig withdrawal system in emergency state
 
+- Remove test functions from the contract. For the purpose of this project it is fine to leave it in the contract, but it does use unneccessary gas to deploy
+
 - Include ERC-20 tokens as mediums of payment
 
 - Implement an oracle to convert the Eth price to a $US price
+
+- Serve the UI from IPFS
 
 
 ## Project Requirements
