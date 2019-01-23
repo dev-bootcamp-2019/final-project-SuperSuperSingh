@@ -108,9 +108,9 @@ Implement an oracle to convert the Eth price to a $US price
 
 ## Project Requirements
 ### User Interface Requirements
-[ ] Run the app on a dev server locally for testing/grading
-[ ] You should be able to visit a URL and interact with the application
-[ ] App recognizes current account
+- [ ] Run the app on a dev server locally for testing/grading
+- [ ] You should be able to visit a URL and interact with the application
+- [ ] App recognizes current account
 [ ] Sign transactions using MetaMask or uPort
 [ ] Contract state is updated
 [ ] Update reflected in UI
