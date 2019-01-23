@@ -136,5 +136,5 @@ Implement an oracle to convert the Eth price to a $US price
  [ ] Implement an upgradable design pattern
  [ ] Write a smart contract in LLL or Vyper
  [ ] Use uPort
- [ ] Use IPFS
- [ ] Use Oracle
+ [ ]Use IPFS
+ [ ]Use Oracle
