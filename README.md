@@ -130,6 +130,7 @@ npm run dev
 This creates a local server in which the GUI can be accessed. The typical address is localhost:3000
 
 *For a localhost blockchain deployment* 
+
 Once the GUI is loaded in your browser, open the Metamask browser extension, and then select "Import using account seed phrase" at the bottom of the window. A new browser tab should open. Select localhost network from the available networks, and again, "Import using account seed phrase". Navigate back to the terminal in which Ganache-cli was run, and copy the 12-word mnemonic that is displayed. Copy and paste these words into the Metamask wallet seed field. Enter a password and click restore. The local blockchain account that was used to deploy the dapp is now available for use via Metamask.
 
 For testnet or mainnet deployment, you will have to load your Rinkeby or private Metamask account respevtively in a similar fashion to above, except using the relevant network selection.
