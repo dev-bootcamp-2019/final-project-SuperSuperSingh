@@ -9,7 +9,7 @@ Modifiers are used to prevent access to functionality not belonging to the owner
 
 ## 2. Integer overflow/underflow
 
-The SafeMath library by [OpenZeppelin](https://openzeppelin.org/api/docs/math_SafeMath.html) has been implemented to control the shop counter and item counter.
+The SafeMath library by [OpenZeppelin](https://openzeppelin.org/api/docs/math_SafeMath.html) has been implemented to control the shop counter and item counter. It is also used to protect account balances on withdrawals of store funds.
 
 
 ## 3. Transaction protocols
@@ -19,4 +19,4 @@ Used msg.sender as opposed to tx.origin for value transfers.
 
 ## 4. Gas limits
 
-Minimal use of arrays and avoidance of looping functions of indeterminate length. A mapping was used to track administrators, shop owners and shops. These values can therefore be referenced without the need for a loop task.
+Zero use of arrays and looping functions. A mapping was used to track administrators, shop owners and shops. These values can therefore be referenced without the need for a loop task.
