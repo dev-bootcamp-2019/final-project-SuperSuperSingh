@@ -72,7 +72,7 @@ Upon initial deployment, an administrator and store owner will not exist. The co
 
 A shopper will not see any stores or items until a store owner has created a store and added items to sell within that store.
  
-At the current state of the codebase with simplified functionality, a contract owner takes precidence in the login heirarchy, and therefore cannot log in as an adminstrator, store owner or shopper. The same applies to administrators and store owners in their respective ranking.
+At the current state of the codebase with simplified functionality, a contract owner takes precedence in the login hierarchy, and therefore cannot log in as an administrator, store owner or shopper. The same applies to administrators and store owners in their respective ranking.
 
 **A note on error handling**
 
@@ -134,7 +134,7 @@ In another terminal (or tab), run
 ```
 $ truffle migrate --reset
 ```
-Note that the first instance of project setup may require adminstrator access - $sudo truffle migrate --reset
+Note that the first instance of project setup may require administrator access - $sudo truffle migrate --reset
 
 In a third terminal (or tab), run
 ```
@@ -149,7 +149,7 @@ Once the GUI is loaded in your browser, open the Metamask browser extension, and
 
 *Metamask setup in testnet or mainnet* 
 
-For testnet or mainnet deployments, you will have to load your Rinkeby or private Metamask account respevtively in a similar fashion to above, except using the relevant network selection. The details will not be discussed here, but requires real Ether or Ether from a testnet faucet.
+For testnet or mainnet deployments, you will have to load your Rinkeby or private Metamask account respectively in a similar fashion to above, except using the relevant network selection. The details will not be discussed here, but requires real Ether or Ether from a testnet faucet.
 
 Sample tests have been developed and are accessible in the MarketPlace.js file under the test folder. To run the tests, open a new terminal, navigate to the root folder of the app and enter
 ```
@@ -182,7 +182,7 @@ Which should deploy the contract to the Rinkeby testnet.
 
 - Include a n-of-m multisig withdrawal system in emergency state
 
-- Remove test functions from the contract. For the purpose of this project it is fine to leave it in the contract, but it does use unneccessary gas to deploy
+- Remove test functions from the contract. For the purpose of this project it is fine to leave it in the contract, but it does use unnecessary gas to deploy
 
 - Include ERC-20 tokens as mediums of payment
 
