@@ -1,3 +1,7 @@
+Link to verified Etherscan deployments
+https://rinkeby.etherscan.io/address/0xa197eed1435010b77a18b9c168b716d87f5274c5#code
+
+
 ⚠️  Important ⚠️
 If you're using an HDWalletProvider, it must be Web3 1.0 enabled or your migration will hang.
 
