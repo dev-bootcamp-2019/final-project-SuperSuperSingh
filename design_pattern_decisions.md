@@ -30,7 +30,9 @@ As with Ownable, the SafeMath contract - again, audited and approved for use by 
 
 ## Behavioural guards
 
-*Intending to implement a library to prevent empty input*
+Limited input validation has been incorporated into the front end, as it has been specified that this is not a course in front-end development.
+
+Within the contract itself, all functions have validation modifiers to ensure correct access, correct deposits & withdrawals, and correct state changes are maintained.
 
 
 ## Gas optimisation
