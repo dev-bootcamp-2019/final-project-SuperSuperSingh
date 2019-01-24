@@ -1,20 +1,21 @@
-/*
-Questions:
-Implement Eth/USD price
-*/
-
 pragma solidity 0.5.0;
+
+/** @title Decentralised Online Marketplace
+  * @author Kreaan Singh
+  * @notice Final project Consensys Developers Course 2019
+*/
 
 import "./Ownable.sol";
 import "./SafeMath.sol";
 
 contract MarketPlace is Ownable {
+    /** @dev Solidity-based smart contract to create a decentralised marketplace for shop owners to create storefronts and sell products
+    */
 
     uint public storeCount = 0;
     uint public skuCount = 0;
     bool public stopped = false;
 
-    //Struct to hold details about each item for sale in a particular store
     struct ItemForSale {
         string name;
         uint quantity;
@@ -22,16 +23,15 @@ contract MarketPlace is Ownable {
     }
 
     struct StoreFronts {
-        string storeName; //Struct containing store name to display on UI
-        address payable storeOwner; //Address to cross check that the store owner is calling the function
-        uint pendingWithdrawal; //Total sales value of store
+        string storeName;
+        address payable storeOwner;
+        uint pendingWithdrawal;
         uint latestSkuNoInStore;
-        mapping(uint => ItemForSale) sku; //Mapping of all stock being sold by a particular store
+        mapping(uint => ItemForSale) sku;
     }
 
-    //used a mapping as opposed to an array to avoid use of a loop to find matches
-    mapping(address => bool) public adminsDB; //mapping of admins by address
-    mapping(address => bool) public storeOwnersDB; //mapping of store owners by address
+    mapping(address => bool) public adminsDB;
+    mapping(address => bool) public storeOwnersDB;
     mapping(uint => StoreFronts) public storeFront;
 
 
@@ -108,8 +108,13 @@ contract MarketPlace is Ownable {
 
 
 
-    //Contract owner functions
+    /** @notice Contract owner functions
+     */
 
+
+    /** @dev Contract owner assigns administrator rights to an ethereum account
+      * @param _admin ethereum address
+     */
     function addAdmin(address _admin) 
         public
         stopInEmergency()
@@ -119,6 +124,10 @@ contract MarketPlace is Ownable {
             emit adminAdded(_admin);
     }
 
+
+    /** @dev Contract owner revokes administrator rights from an ethereum account
+      * @param _admin ethereum address
+     */
     function deleteAdmin(address _admin) 
         public
         stopInEmergency()
@@ -128,6 +137,8 @@ contract MarketPlace is Ownable {
             emit adminDeleted(_admin);
     }
 
+    /** @dev Contract owner activates emergency stop - disables all contract functionality
+     */
     function activateEmergencyStop()
         public
         onlyOwner()
@@ -135,6 +146,8 @@ contract MarketPlace is Ownable {
             stopped = true;
     }
 
+    /** @dev Contract owner deactivates emergency stop - enables all contract functionality
+     */
     function deActivateEmergencyStop()
         public
         onlyOwner()
@@ -142,6 +155,8 @@ contract MarketPlace is Ownable {
             stopped = false;
     }
 
+    /** @dev Contract owner withdraws all funds of contract in an emergency situation
+     */
     function withdrawAllFunds()
         public
         onlyOwner()
@@ -151,8 +166,14 @@ contract MarketPlace is Ownable {
     }
 
 
-    //Admin functions
 
+    /** @notice Administrator functions
+     */
+
+    
+    /** @dev Administrator assigns store owner rights to an ethereum account
+      * @param _newStoreOwner ethereum address
+     */
     function addStoreOwner(address _newStoreOwner) 
         public
         stopInEmergency()
@@ -162,6 +183,9 @@ contract MarketPlace is Ownable {
             emit storeOwnerAdded(_newStoreOwner);
     }
 
+    /** @dev Administrator revokes store owner rights from an ethereum account
+      * @param _deleteStoreOwner ethereum address
+     */
     function deleteStoreOwner(address _deleteStoreOwner) 
         public
         stopInEmergency()
@@ -173,8 +197,15 @@ contract MarketPlace is Ownable {
 
 
 
-    //Store owner functions
+    /** @notice Store owner functions
+     */
 
+    
+    /** @dev Store owner creates a new storefront
+      * @param _storeName The display name of the store to create
+      * @notice storeOwner Associates the store and the owner
+      * @notice storeID Generates a unique ID for the newly added store
+     */
     function createStoreFront(string memory _storeName) 
         public
         stopInEmergency()
@@ -186,6 +217,13 @@ contract MarketPlace is Ownable {
             emit storeFrontCreated(storeCount, _storeName, msg.sender);
     }
 
+    /** @dev Store owner adds a new item to a particular store that he/she owns
+      * @param _nameOfItem The display name of the item to be added
+      * @param _quantity The quantity of the item that is to be added
+      * @param _price The price per unit of the item to be added
+      * @param _storeID The unique ID of the store to which the item will be added. The store ID is generated upon store creation
+      * @notice skuCount Generates a unique ID assigned to a newly created item
+     */
     function addItem(string memory _nameOfItem, uint _quantity, uint _price, uint _storeID) 
         public
         stopInEmergency()
@@ -201,6 +239,11 @@ contract MarketPlace is Ownable {
             emit itemToSellAdded(skuCount, _storeID, _nameOfItem, _quantity, _price);
     }
 
+    /** @dev Store owner changes the price of an already existing item in a particular store that he/she owns
+      * @param _skuCode The unique ID belonging to that particular item
+      * @param _storeID The unique ID of the store that the item exists in
+      * @param _newPrice The new price of the item
+     */
     function changePrice(uint _skuCode, uint _storeID, uint _newPrice) 
         public
         stopInEmergency()
@@ -212,6 +255,10 @@ contract MarketPlace is Ownable {
             emit itemPriceUpdated(_skuCode, _storeID, _newPrice);
     }
 
+    /** @dev Store owner deletes an item from a particular store that he/she owns
+      * @param _skuCode The unique ID belonging to that particular item
+      * @param _storeID The unique ID of the store that the item exists in
+     */
     function deleteItem(uint _storeID, uint _skuCode)
         public
         stopInEmergency()
@@ -223,6 +270,10 @@ contract MarketPlace is Ownable {
             emit itemForSaleDeleted(_storeID, _skuCode);
     }
 
+    /** @dev Store owner withdraws the revenue generated from sales in a particular store
+      * @param _withdrawAmount The amount to withdraw. Can withdraw the full balance or a particular amount, to refund customers for returns for eg
+      * @param _storeID The unique ID of the store to withdraw from
+     */
     function withdrawSales(uint _withdrawAmount, uint _storeID) 
         public
         stopInEmergency()
@@ -237,8 +288,17 @@ contract MarketPlace is Ownable {
     }
 
 
+
+    /** @notice Shopper functions
+     */
     
-    //Shopper functions
+
+    /** @dev Shopper logs in, browses stores, selects a store, and can purchase an item from the chosen store
+      * @param _quantity The number of units of a chosen item to purchase
+      * @param _skuCode The unique ID of the item to purchase
+      * @param _storeID The unique ID of the store to purchase from (not shown on the UI as by this point, they would already be within the store i.e. store ID is known)
+      * @notice Payable payment for the purchase
+     */
     function buyItem(uint _quantity, uint _skuCode, uint _storeID) 
         public
         payable
@@ -255,7 +315,13 @@ contract MarketPlace is Ownable {
 
 
 
-    //Getters
+    /** @notice Getters
+     */
+
+    /** @dev Gets the latest sku ID, used as the end parameter of a js loop to display the shop items on the UI
+      * @param _storeID The unique ID of the store to display the items of
+      * @return latestSkuNoInStore The latest item ID added to the store
+     */
     function getLatestSKU(uint _storeID) 
         public
         view
@@ -264,20 +330,29 @@ contract MarketPlace is Ownable {
         return storeFront[_storeID].latestSkuNoInStore;
     }
 
+    /** @dev Gets the details of each item in a shop to display on the UI
+      * @param _storeID The unique ID of the store to display the items of
+      * @param _sku The unique ID of each item in a particular store
+      * @return itemName The name of the item to display
+      * @return itemQuantity The number of units of a particular item available in the store
+      * @return itemPrice The price per unit of item available to purchase
+     */
     function getItemInShop(uint _storeID, uint _sku)
         public
         view
-        returns (string memory, uint, uint)
+        returns (string memory itemName, uint itemQuantity, uint itemPrice)
     {
-            string memory itemName = storeFront[_storeID].sku[_sku].name;
-            uint itemQuantity = storeFront[_storeID].sku[_sku].quantity;
-            uint itemPrice = storeFront[_storeID].sku[_sku].price;
+            itemName = storeFront[_storeID].sku[_sku].name;
+            itemQuantity = storeFront[_storeID].sku[_sku].quantity;
+            itemPrice = storeFront[_storeID].sku[_sku].price;
             return (itemName, itemQuantity, itemPrice);
     }
 
-
-
-    //Testing
+    /** @notice Test getters
+      * @dev Fetches the existence of an admin
+      * @param _isAdmin The address of account to check the admin status of
+      * @return The status of the account => admin or not admin
+     */
     function fetchAdmin(address _isAdmin) 
         public
         view
@@ -287,6 +362,10 @@ contract MarketPlace is Ownable {
             return newAdminExists;
     }
 
+    /** @dev Fetches the existence of a store owner
+      * @param _isStoreOwner The address of account to check the store owner status of
+      * @return The status of the account => store owner or not store owner
+     */
     function fetchStoreOwner(address _isStoreOwner)
         public
         view
@@ -296,6 +375,11 @@ contract MarketPlace is Ownable {
             return newStoreOwner;
     }
 
+    /** @dev Fetch function used for testing to check that a store was added correctly
+      * @param _storeID The store ID for which to check the store owner and store name of
+      * @return newStoreOwnerAddress The address of account to confirm ownership against
+      * @return storeNameAdded The name of the store to confirm creation of
+     */
     function fetchStoreID(uint _storeID)
         public
         view
@@ -306,17 +390,11 @@ contract MarketPlace is Ownable {
             return (newStoreOwnerAddress, storeNameAdded);
     }
 
-    function fetchItem(uint _storeID, uint _skuCode)
-        public
-        view
-        returns (string memory isName, uint isQuantity, uint isPrice)
-    {
-            isName = storeFront[_storeID].sku[_skuCode].name;
-            isQuantity = storeFront[_storeID].sku[_skuCode].quantity;
-            isPrice = storeFront[_storeID].sku[_skuCode].price;
-            return (isName, isQuantity, isPrice);
-    }
-
+    /** @dev Checks that an item quantity has been reduced after a purchase
+      * @param _currentStoreID The store ID to retrieve information from
+      * @param _currentSKU The item ID to retrieve information about
+      * @return quantity The balance of items left in the shop
+     */
     function isItemBought(uint _currentStoreID, uint _currentSKU)
         public
         view
@@ -325,16 +403,11 @@ contract MarketPlace is Ownable {
             return newQuantity = storeFront[_currentStoreID].sku[_currentSKU].quantity;
     }
 
+    /** @dev Checks the balance of the store after sales have been made
+      * @param _storeID The store ID for which to check the balance of
+      * @return storeBalance The current balance of the store
+     */
     function fetchStoreBalance (uint _storeID)
-        public
-        view
-        returns (uint storeBalance)
-    {
-            storeBalance = storeFront[_storeID].pendingWithdrawal;
-            return storeBalance;
-    }
-
-    function fetchSalesWithdrawn(uint _storeID)
         public
         view
         returns (uint storeBalance)

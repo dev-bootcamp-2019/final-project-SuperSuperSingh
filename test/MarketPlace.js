@@ -88,7 +88,7 @@ contract('MarketPlace', function(accounts){
             eventEmitted = true
         }
     
-        const result = await marketPlace.fetchItem.call(storeID, newItemID)
+        const result = await marketPlace.getItemInShop.call(storeID, newItemID)
 
         assert.equal(result[0], itemName, 'the item name was not correctly added')
         assert.equal(result[1], itemQuantity, 'the item quantity was not correctly added')
