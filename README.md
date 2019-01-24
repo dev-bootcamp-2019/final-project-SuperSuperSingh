@@ -68,9 +68,9 @@ There are 4 sets of users - the contract owner, the administrator, the shopfront
 
 The dapp will automatically recognise the account and verify access rights upon login. This action takes the user to the relevant view in which the functions that are pertinent to him/her are visible.
 
-Upon initial deployment, an administrator and store owner will not exist. The contract owner must first assign administrator rights, who then can assign store owner rights.
+Upon initial deployment, an administrator and store owner will not exist. The contract owner must first assign administrator rights to a user, who can then assign store owner rights to the next user.
 
-A shopper will not see any stores or items within stores until a store owner has created a store and created items to sell within that store.
+A shopper will not see any stores or items until a store owner has created a store and added items to sell within that store.
  
 At the current state of the codebase with simplified functionality, a contract owner takes precidence in the login heirarchy, and therefore cannot log in as an adminstrator, store owner or shopper. The same applies to administrators and store owners in their respective ranking.
 
@@ -93,7 +93,7 @@ Host OS - Windows 10 Home edition
 [VM OS - Ubuntu 18.4.1](https://www.ubuntu.com/download/desktop)
 
 
-### Dependencies
+### Installations
 
 [Ganache-cli](https://truffleframework.com/ganache)
 
@@ -101,10 +101,10 @@ Host OS - Windows 10 Home edition
 
 [Metamask](https://metamask.io/)
 
-Lite server
+Lite server - installed with npm/node
 
 
-In command line, run the following commands as root/administrator. Lite server is installed alongside nodejs.
+In command line, run the following commands as root/administrator.
 ```
 $ sudo apt-get install nodejs
 $ sudo apt-get install npm
