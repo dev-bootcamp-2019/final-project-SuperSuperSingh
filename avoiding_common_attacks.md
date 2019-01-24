@@ -1,6 +1,6 @@
-# Avoinding common attacks
+# Avoiding common attacks
 
-## 1. Reentrancy
+## 1. Re-entrancy
 
 Balance states are changed *prior* to the movement of funds. The store owner can choose the amount to withdraw, but is prevented from withdrawing more than exists in his/her balance. In addition, store balances are stored as independent variables of the contract balance, limiting the potential for losses.
 
