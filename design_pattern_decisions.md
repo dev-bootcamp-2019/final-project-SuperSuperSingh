@@ -5,7 +5,7 @@
 
 [Open Zeppelins](https://openzeppelin.org/) has developed secured contracts that have been already audited. The use of the Ownable contract ensures that the contract deployer is safely assigned ownership status of the contract.
 
-Within the contract, the use of modifiers prevent accounts from accessing functions if they are not authorised to do so. The heirarchy of access rights is:
+Within the contract, the use of modifiers prevent accounts from accessing functions if they are not authorised to do so. The hierarchy of access rights is:
 
 1. Contract Owner
 
