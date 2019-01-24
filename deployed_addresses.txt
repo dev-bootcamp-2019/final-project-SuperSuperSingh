@@ -1,0 +1,59 @@
+⚠️  Important ⚠️
+If you're using an HDWalletProvider, it must be Web3 1.0 enabled or your migration will hang.
+
+
+Starting migrations...
+======================
+> Network name:    'rinkeby'
+> Network id:      4
+> Block gas limit: 7115417
+
+
+1_initial_migration.js
+======================
+
+   Deploying 'Migrations'
+   ----------------------
+   > transaction hash:    0x52a5ac272f81c50383561cc3e35a3cee7d37ebf67b7562da5c4dd6d7c09cac75
+   > Blocks: 0            Seconds: 9
+   > contract address:    0xa4fBf51c2F10DcAD263c67977995737D658d4b8E
+   > account:             0x047153749f666ea9810123F99469375e8b2B2d81
+   > balance:             2.96923752899999439
+   > gas used:            284908
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.00569816 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.00569816 ETH
+
+
+2_deploy_contracts.js
+=====================
+
+   Deploying 'MarketPlace'
+   -----------------------
+   > transaction hash:    0x2e132f6f7b5d10f5bf92869c383e307a187640a5f72699e2d8d3e946c9a9832f
+   > Blocks: 1            Seconds: 9
+   > contract address:    0xA197EED1435010b77a18b9C168b716d87f5274c5
+   > account:             0x047153749f666ea9810123F99469375e8b2B2d81
+   > balance:             2.88920970899999439
+   > gas used:            3959357
+   > gas price:           20 gwei
+   > value sent:          0 ETH
+   > total cost:          0.07918714 ETH
+
+
+   > Saving migration to chain.
+   > Saving artifacts
+   -------------------------------------
+   > Total cost:          0.07918714 ETH
+
+
+Summary
+=======
+> Total deployments:   2
+> Final cost:          0.0848853 ETH
