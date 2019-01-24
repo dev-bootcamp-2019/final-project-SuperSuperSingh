@@ -15,6 +15,7 @@ contract('MarketPlace', function(accounts){
     const itemPrice = 10
     const itemQuantityBought = 50
 
+    //Assigns account [1] administrator rights, and calls the contract to check if the administrator exists in the mapping adminsDB once complete
     it("should assign accounts[1] administrator rights", async() => {
         const marketPlace = await MarketPlace.deployed()
 
@@ -35,6 +36,7 @@ contract('MarketPlace', function(accounts){
 
     })
 
+    //Assigns account [2] shop owner rights, and calls the contract to check if the shop owner exists in the mapping storeOwnersDB once complete
     it("should assign accounts[2] shop owner rights", async() => {
         const marketPlace = await MarketPlace.deployed()
 
@@ -55,6 +57,8 @@ contract('MarketPlace', function(accounts){
 
     })
 
+    //Adds a new store under the store owner just created, and calls the contract to check that the msg.sender was assigned as the owner of this store,
+    //That the store name was recorded, and that the event was emitted. Data pulled from storeFronts[1]
     it("should add a store by the store owner", async() => {
         const marketPlace = await MarketPlace.deployed()
 
@@ -75,6 +79,8 @@ contract('MarketPlace', function(accounts){
         assert.equal(eventEmitted, true, 'adding a storefront should emit a addStoreFront event')
     })
 
+    //Adds a new item to the store just created, and calls the contract to check that the item name, quantity, price was recorded in the mapping sku 
+    //within the mapping storeFront
     it("should add an item to the store just created (store 1)", async() => {
         const marketPlace = await MarketPlace.deployed()
 
@@ -96,6 +102,8 @@ contract('MarketPlace', function(accounts){
         assert.equal(eventEmitted, true, 'adding a storefront should emit a addStoreFront event')
     })
 
+    //Attempts to purchase the item just added, and verifies the purchase by checking that the store balance has increased and the shoppper balance 
+    //has decreased by what was expected
     it("should be able to purchase item just added to store (store 1)", async() => {
         const marketPlace = await MarketPlace.deployed()
 
@@ -117,7 +125,6 @@ contract('MarketPlace', function(accounts){
 
         const result = await marketPlace.isItemBought.call(storeID, itemSKU)
 
-        //assert.equal(result[0], itemQuantity - itemQuantityBought, "Incorrect balance of quantities")  Why is this failing?
         assert.equal(parseInt(storeBalanceAfter), parseInt(storeBalanceBefore, 10) + parseInt(itemQuantityBought * itemPrice, 10), 'the balance of the store should increase by the price of the item multiplied by the quantity purchased')
         assert.isBelow(parseInt(shopperBalanceAfter), parseInt(shopperBalanceBefore, 10) - parseInt(itemQuantityBought * itemPrice, 10), "The shoppers balance should decrease by more than the total purchase price + gas costs")
         assert.equal(eventEmitted, true, 'purchasing an item should emit a buyItem event')
