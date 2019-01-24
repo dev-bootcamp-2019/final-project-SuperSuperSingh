@@ -62,9 +62,23 @@ There are 4 sets of users - the contract owner, the administrator, the shopfront
 
 - Enter a shopfront and view items available for sale
 
-- Purchase items from a particular shopfront
+- Purchase items from a particular storefront
 
+**Initial deployment walkthrough**
 
+The dapp will automatically recognise the account and verify access rights upon login. This action takes the user to the relevant view in which the functions that are pertinent to him/her are visible.
+
+Upon initial deployment, an administrator and store owner will not exist. The contract owner must first assign administrator rights, who then can assign store owner rights.
+
+A shopper will not see any stores or items within stores until a store owner has created a store and created items to sell within that store.
+ 
+At the current state of the codebase with simplified functionality, a contract owner takes precidence in the login heirarchy, and therefore cannot log in as an adminstrator, store owner or shopper. The same applies to administrators and store owners in their respective ranking.
+
+**A note on error handling**
+
+Errors that originate from the contract, such as access rights, incorrect deposits, and empty inputs can be viewed in the console. To access the console, right click on the web page and select "inspect", or similar.
+
+As a future improvement, errors originating from the contract should be displayed in the UI.
 
 ## Application setup
 
@@ -164,29 +178,31 @@ $ test
 
 - Serve the UI from IPFS
 
+- Input validation
+
 
 ## Project Requirements
 ### User Interface Requirements
-- [ ] Run the app on a dev server locally for testing/grading
-- [ ] You should be able to visit a URL and interact with the application
-- [ ] App recognizes current account
-- [ ] Sign transactions using MetaMask or uPort
-- [ ] Contract state is updated
-- [ ] Update reflected in UI
+- [x] Run the app on a dev server locally for testing/grading
+- [x] You should be able to visit a URL and interact with the application
+- [x] App recognizes current account
+- [x] Sign transactions using MetaMask or uPort
+- [x] Contract state is updated
+- [x] Update reflected in UI
 ### Test Requirements
-- [ ] Write 5 tests for each contract you wrote
-- [ ] Solidity or JavaScript
-- [ ] Explain why you wrote those tests
-- [ ] Tests run with truffle test
+- [x] Write 5 tests for each contract you wrote
+- [x] Solidity or JavaScript
+- [x] Explain why you wrote those tests
+- [x] Tests run with truffle test
 ### Design Pattern Requirements
-- [ ] Implement a circuit breaker (emergency stop) pattern
-- [ ] What other design patterns have you used / not used?
-- [ ] Why did you choose the patterns that you did?
-- [ ] Why not others?
+- [x] Implement a circuit breaker (emergency stop) pattern
+- [x] What other design patterns have you used / not used?
+- [x] Why did you choose the patterns that you did?
+- [x] Why not others?
 ### Security Tools / Common Attacks
-- [ ] Explain what measures you’ve taken to ensure that your contracts are not susceptible to common attacks
-- [ ] Use a library or extend a contract
-- [ ] Via EthPM or write your own
+- [x] Explain what measures you’ve taken to ensure that your contracts are not susceptible to common attacks
+- [x] Use a library or extend a contract
+- [x] Via EthPM or write your own
 ### Stretch Requirements
 - [ ] Deploy contract on testnet
 - [ ] Use Ethereum Name Service
