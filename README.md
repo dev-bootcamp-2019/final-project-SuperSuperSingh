@@ -162,6 +162,18 @@ $ migrate
 $ test
 ```
 
+### Rinkeby testnet deployment
+
+To deploy to the Rinkeby testnet, first ensure that you have a funded Rinkeby address in Metamask. To fund your account, visit [this Rinkeby faucet](https://faucet.rinkeby.io/).
+
+Once you have funds in your account, type the following into your command line
+```
+$ truffle migrate --network rinkeby
+```
+
+Which should deploy the contract to the Rinkeby testnet.
+
+
 ## Enhancemets
 
 - Implement a more robust administrator management system, including the abilities to freeze particular stores and approve stores before they are activated
