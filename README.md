@@ -216,7 +216,7 @@ Which should deploy the contract to the Rinkeby testnet.
 - [x] Use a library or extend a contract
 - [x] Via EthPM or write your own
 ### Stretch Requirements
-- [ ] Deploy contract on testnet
+- [x] Deploy contract on testnet
 - [ ] Use Ethereum Name Service
 - [ ] Add functionality that allows store owners to create an auction for an individual item in their store
 - [ ] Give store owners the option to accept any ERC-20 token
