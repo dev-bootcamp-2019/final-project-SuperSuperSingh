@@ -74,6 +74,8 @@ A shopper will not see any stores or items until a store owner has created a sto
  
 At the current state of the codebase with simplified functionality, a contract owner takes precedence in the login hierarchy, and therefore cannot log in as an administrator, store owner or shopper. The same applies to administrators and store owners in their respective ranking.
 
+Metamask will generally open a confirmation window upon every state-changing transaction (most button clicks), but if it does not, click on the Metamask extension icon to confirm.
+
 **A note on error handling**
 
 Errors that originate from the contract, such as access rights, incorrect deposits, and empty inputs can be viewed in the console. To access the console, right click on the web page and select "inspect", or similar.
@@ -170,7 +172,14 @@ Once the account is active, save the 12 word seed phrase in a file called ".secr
 
 To fund your account, visit [this Rinkeby faucet](https://faucet.rinkeby.io/).
 
-Once you have funds in your account, type the following into your command line
+Once you have funds in your account, visit infura.io, create a free account and a new project. Change the project endpoint to "Rinkeby", and copy the project ID. Assign this ID to the infuraKey constant in truffle-config.js. Uncomment all code.
+
+For Truffle to derive the Ethereum address from your mnemonic, Truffle HD wallet provider needs to be installed. Run the command
+```
+$ npm install truffle-hdwallet-provider
+```
+
+Once completed, type the following into your command line
 ```
 $ truffle migrate --network rinkeby
 ```

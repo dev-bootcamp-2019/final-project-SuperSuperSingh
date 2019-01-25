@@ -25468,10 +25468,16 @@
       "links": {},
       "address": "0x3e59623D9a559ed9f060cbCf280F44efBf1d31D5",
       "transactionHash": "0xe77c3692b5c93133861dee714aa95ae393e2a4e14a4373e6707dd543d0c5bcf7"
+    },
+    "1548428466413": {
+      "events": {},
+      "links": {},
+      "address": "0xeb96F23A1851617b155D81068D4815587e5ad0Cb",
+      "transactionHash": "0x2aeec479f1bf47045976976cf1d035521fc40ddf4d2be3b58248660d71375edb"
     }
   },
   "schemaVersion": "3.0.1",
-  "updatedAt": "2019-01-24T13:49:12.664Z",
+  "updatedAt": "2019-01-25T15:20:37.289Z",
   "devdoc": {
     "methods": {
       "activateEmergencyStop()": {
