@@ -164,7 +164,11 @@ $ test
 
 ### Rinkeby testnet deployment
 
-To deploy to the Rinkeby testnet, first ensure that you have a funded Rinkeby address in Metamask. To fund your account, visit [this Rinkeby faucet](https://faucet.rinkeby.io/).
+To deploy to the Rinkeby testnet, first ensure that you have a funded Rinkeby account in Metamask. If you do not have an account, create one within the Metamask extension. Take note of your 12 word seed phrase as you will need this to proceed.
+
+Once the account is active, save the 12 word seed phrase in a file called ".secret" in your projects root directory. *Only create and use this file when deploying your contract. For security purposes, you should not expose this seed phrase to anyone and do not use it to generate a real Ether wallet!*
+
+To fund your account, visit [this Rinkeby faucet](https://faucet.rinkeby.io/).
 
 Once you have funds in your account, type the following into your command line
 ```
