@@ -1387,9 +1387,16 @@
     "name": "solc",
     "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "1548492523325": {
+      "events": {},
+      "links": {},
+      "address": "0x5FeF06944Ef172dd76aff5598790586cbF2b6a1b",
+      "transactionHash": "0x99dbab15db105eb2bd4c0ce74c801c67949fbeb5d15c7dcb3f3ad3339208231d"
+    }
+  },
   "schemaVersion": "3.0.1",
-  "updatedAt": "2019-01-24T09:20:45.158Z",
+  "updatedAt": "2019-01-26T08:52:24.187Z",
   "devdoc": {
     "details": "Unsigned math operations with safety checks that revert on error",
     "methods": {},
